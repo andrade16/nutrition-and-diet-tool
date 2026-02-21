@@ -1,0 +1,128 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 720px;
+  margin-top: 48px;
+}
+
+.heading {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  width: 100%;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  background: var(--foreground);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 40px 28px;
+  cursor: pointer;
+  text-align: center;
+  font-family: var(--font-geist-sans);
+  transition: all 0.3s ease;
+}
+
+.icon {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.cardTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.cardDesc {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.hint {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+  opacity: 0.7;
+}
+
+/* Selected state */
+.selectedState {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 32px;
+  padding: 12px 20px;
+  background: var(--foreground);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
+.selectedLabel strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.changeBtn {
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-family: var(--font-geist-sans);
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Hover — non-touch only */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    border-color: #ccc;
+  }
+
+  .changeBtn:hover {
+    color: var(--text-primary);
+  }
+}
+
+@media (max-width: 600px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: 28px 20px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .card:hover {
+    border-color: #444;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+  }
+}
