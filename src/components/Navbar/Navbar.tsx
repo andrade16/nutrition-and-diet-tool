@@ -1,23 +1,24 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { selectUserRole, setUserRole } from '@/store/slices/userSlice';
-import styles from './Navbar.module.css';
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { selectUserRole, setUserRole } from "@/store/slices/userSlice";
+import styles from "./Navbar.module.css";
+import Chevron from "../Icons/Chevron";
 
-type Role = 'consumer' | 'dietitian';
+type Role = "consumer" | "dietitian";
 
 const NAV_LINKS = [
-  { href: '/search', label: 'Search' },
-  { href: '/meal-planner', label: 'Meal Planner' },
-  { href: '/assessment', label: 'Assessment', dietitianOnly: true },
+  { href: "/search", label: "Search" },
+  { href: "/meal-planner", label: "Meal Planner" },
+  { href: "/assessment", label: "Assessment", dietitianOnly: true },
 ];
 
 const ROLES: { value: Role; label: string }[] = [
-  { value: 'consumer', label: 'Consumer' },
-  { value: 'dietitian', label: 'Dietitian' },
+  { value: "consumer", label: "Consumer" },
+  { value: "dietitian", label: "Dietitian" },
 ];
 
 export default function Navbar() {
@@ -30,12 +31,15 @@ export default function Navbar() {
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleRoleSelect = (selected: Role) => {
@@ -53,12 +57,12 @@ export default function Navbar() {
 
         <ul className={styles.links}>
           {NAV_LINKS.filter(
-            (link) => !link.dietitianOnly || role === 'dietitian'
+            (link) => !link.dietitianOnly || role === "dietitian",
           ).map((link) => (
             <li key={link.href}>
               <Link
                 href={link.href}
-                className={`${styles.link} ${pathname === link.href ? styles.linkActive : ''}`}
+                className={`${styles.link} ${pathname === link.href ? styles.linkActive : ""}`}
               >
                 {link.label}
               </Link>
@@ -73,21 +77,10 @@ export default function Navbar() {
               onClick={() => setIsOpen((prev) => !prev)}
               aria-expanded={isOpen}
             >
-              {role === 'consumer' ? 'Consumer' : 'Dietitian'}
-              <svg
-                className={`${styles.chevron} ${isOpen ? styles.chevronOpen : ''}`}
-                xmlns='http://www.w3.org/2000/svg'
-                width='14'
-                height='14'
-                viewBox='0 0 24 24'
-                fill='none'
-                stroke='currentColor'
-                strokeWidth='2'
-                strokeLinecap='round'
-                strokeLinejoin='round'
-              >
-                <polyline points='6 9 12 15 18 9' />
-              </svg>
+              {role === "consumer" ? "Consumer" : "Dietitian"}
+              <Chevron
+                className={`${styles.chevron} ${isOpen ? styles.chevronOpen : ""}`}
+              />
             </button>
 
             {isOpen && (
@@ -95,7 +88,7 @@ export default function Navbar() {
                 {ROLES.map(({ value, label }) => (
                   <button
                     key={value}
-                    className={`${styles.dropdownItem} ${role === value ? styles.dropdownItemActive : ''}`}
+                    className={`${styles.dropdownItem} ${role === value ? styles.dropdownItemActive : ""}`}
                     onClick={() => handleRoleSelect(value)}
                   >
                     <span className={styles.dropdownDot} />

@@ -1,4 +1,4 @@
-import SearchBar from "@/components/Search/SearchBar";
+import SearchBar from "@/components/Search/SearchBar/SearchBar";
 import SearchResults from "@/components/Search/SearchResults/SearchResults";
 import styles from "./page.module.css";
 import { searchFoods } from "@/lib/usda";
