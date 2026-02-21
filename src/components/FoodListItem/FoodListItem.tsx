@@ -1,7 +1,16 @@
+"use client";
+
 import Link from "next/link";
 import type { FoodItem } from "@/lib/types/usda";
 import styles from "./FoodListItem.module.css";
 import RightArrow from "../Icons/RightArrow";
+import HeartIcon from "../Icons/HeartIcon";
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import {
+  selectFavoriteIds,
+  addFavorite,
+  removeFavorite,
+} from "@/store/slices/favoritesSlice";
 
 interface FoodListItemProps {
   food: FoodItem;
@@ -12,7 +21,11 @@ function toTitleCase(str: string): string {
 }
 
 export default function FoodListItem({ food }: FoodListItemProps) {
-  console.log("FoodListItem render: ", food);
+  const dispatch = useAppDispatch();
+  const favoriteIds = useAppSelector(selectFavoriteIds);
+  console.log("Favorite IDs:", favoriteIds);
+  const isFavorited = favoriteIds.includes(food.fdcId);
+
   const serving =
     food.servingSize && food.servingSizeUnit
       ? `${food.servingSize}${food.servingSizeUnit.toLowerCase()}`
@@ -31,6 +44,19 @@ export default function FoodListItem({ food }: FoodListItemProps) {
 
       <div className={styles.right}>
         {serving && <span className={styles.serving}>{serving}</span>}
+        <button
+          className={styles.heartBtn}
+          onClick={(e) => {
+            e.preventDefault();
+            if (isFavorited) {
+              dispatch(removeFavorite(food.fdcId));
+            } else {
+              dispatch(addFavorite(food.fdcId));
+            }
+          }}
+        >
+          <HeartIcon isFavorited={isFavorited} />
+        </button>
         <RightArrow className={styles.arrow} />
       </div>
     </Link>

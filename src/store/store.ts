@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore } from "@reduxjs/toolkit";
 import {
   persistReducer,
   FLUSH,
@@ -7,19 +7,25 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
-} from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-import userReducer from './slices/userSlice';
-import nutritionReducer from './slices/nutritionSlice';
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import userReducer from "./slices/userSlice";
+import nutritionReducer from "./slices/nutritionSlice";
+import favoritesReducer from "./slices/favoritesSlice";
 
 const userPersistConfig = {
-  key: 'user',
+  key: "user",
   storage,
-  whitelist: ['role'], // only persist role, not auth state
+  whitelist: ["role"], // only persist role, not auth state
 };
 
 const nutritionPersistConfig = {
-  key: 'nutrition',
+  key: "nutrition",
+  storage,
+};
+
+const favoritesPersistConfig = {
+  key: "favorites",
   storage,
 };
 
@@ -28,6 +34,7 @@ export const makeStore = () =>
     reducer: {
       user: persistReducer(userPersistConfig, userReducer),
       nutrition: persistReducer(nutritionPersistConfig, nutritionReducer),
+      favorites: persistReducer(favoritesPersistConfig, favoritesReducer),
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
@@ -38,5 +45,5 @@ export const makeStore = () =>
   });
 
 export type AppStore = ReturnType<typeof makeStore>;
-export type RootState = ReturnType<AppStore['getState']>;
-export type AppDispatch = AppStore['dispatch'];
+export type RootState = ReturnType<AppStore["getState"]>;
+export type AppDispatch = AppStore["dispatch"];
