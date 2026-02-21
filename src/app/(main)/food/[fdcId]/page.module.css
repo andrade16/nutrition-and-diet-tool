@@ -1,0 +1,169 @@
+.page {
+  --background: #fafafa;
+  --foreground: #fff;
+  --text-primary: #000;
+  --text-secondary: #666;
+  --border-color: #e5e5e5;
+  --accent: #000;
+
+  min-height: calc(100vh - 64px);
+  background-color: var(--background);
+  font-family: var(--font-geist-sans);
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 30px 30px;
+}
+
+.header {
+  margin-bottom: 40px;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: var(--text-primary);
+  margin: 0 0 16px 0;
+  line-height: 1.2;
+}
+
+.brand {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 0 0 6px 0;
+}
+
+.category {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.servingInfo {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: var(--foreground);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+}
+
+.sectionTitle {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  margin: 0 0 12px 0;
+}
+
+.serving {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.nutrition {
+  margin-bottom: 40px;
+}
+
+.macros {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.macro {
+  padding: 24px;
+  background: var(--foreground);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.macroLabel {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+}
+
+.macroValue {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+}
+
+.metadata {
+  padding: 24px;
+  background: var(--foreground);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+}
+
+.metadata p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0 0 8px 0;
+}
+
+.metadata p:last-child {
+  margin-bottom: 0;
+}
+
+.dataType,
+.fdcId {
+  font-family: var(--font-geist-mono), monospace;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .macro:hover {
+    border-color: #bbb;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 48px 20px 32px;
+  }
+
+  .title {
+    font-size: 28px;
+  }
+
+  .macros {
+    grid-template-columns: 1fr;
+  }
+
+  .macroValue {
+    font-size: 24px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .page {
+    --background: #0a0a0a;
+    --foreground: #1a1a1a;
+    --text-primary: #ededed;
+    --text-secondary: #999;
+    --border-color: #2a2a2a;
+    --accent: #fff;
+  }
+
+  .macro:hover {
+    border-color: #444;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+}

@@ -4,7 +4,7 @@ import styles from "./page.module.css";
 import { searchFoods } from "@/lib/usda";
 
 interface SearchPageProps {
-  searchParams: Promise<{ query?: string }>;
+  searchParams: Promise<{ query?: string; page: number }>;
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {

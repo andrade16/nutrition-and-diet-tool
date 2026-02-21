@@ -5,6 +5,29 @@ export interface FoodNutrient {
   value: number;
 }
 
+export interface FoodDetailNutrient {
+  id: number;
+  nutrient: {
+    id: number;
+    name: string;
+    unitName: string;
+  };
+  amount: number;
+}
+
+export interface FoodDetail {
+  fdcId: number;
+  description: string;
+  dataType: string;
+  brandOwner?: string;
+  brandName?: string;
+  servingSize?: number;
+  servingSizeUnit?: string;
+  householdServingFullText?: string;
+  foodCategory?: string;
+  foodNutrients: FoodDetailNutrient[];
+}
+
 export interface FoodItem {
   fdcId: number;
   description: string;

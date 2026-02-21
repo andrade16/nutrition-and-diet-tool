@@ -1,4 +1,4 @@
-import type { SearchResponse } from "@/lib/types/usda";
+import type { FoodDetail, SearchResponse } from "@/lib/types/usda";
 
 const BASE_URL = "https://api.nal.usda.gov/fdc/v1";
 
@@ -27,7 +27,7 @@ export async function searchFoods(
   return res.json();
 }
 
-export async function getFoodById(fdcId: string) {
+export async function getFoodById(fdcId: string): Promise<FoodDetail> {
   const url = buildUrl(`/food/${fdcId}`, {});
 
   const res = await fetch(url, { next: { revalidate: 3600 } }); // cache 1 hr — food data rarely changes
