@@ -28,7 +28,7 @@ export default function FoodListItem({ food }: FoodListItemProps) {
       <div className={styles.right}>
         {serving && <span className={styles.serving}>{serving}</span>}
         <FavoriteButton
-          fdcId={food.fdcId}
+          food={food}
           className={styles.heartBtn}
           showLabel={false}
           iconSize={20}

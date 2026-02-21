@@ -1,4 +1,4 @@
-import { getFoodById } from "@/lib/usda";
+import { getFoodById } from "@/lib/usda-api";
 import FoodDetailView from "@/components/FoodDetail/FoodDetailView";
 import FavoriteButton from "@/components/FavoriteButton/FavoriteButton";
 import { toTitleCase } from "@/lib/strings";
@@ -11,7 +11,6 @@ interface FoodDetailPageProps {
 export default async function FoodDetailPage({ params }: FoodDetailPageProps) {
   const { fdcId } = await params;
   const food = await getFoodById(fdcId);
-  console.log("Food detail data ===> ", food);
 
   const foodIngredients =
     food.ingredients?.split(",") ?? "No ingredients listed";
@@ -23,7 +22,7 @@ export default async function FoodDetailPage({ params }: FoodDetailPageProps) {
           <div className={styles.titleRow}>
             <h1 className={styles.title}>{toTitleCase(food.description)}</h1>
             <FavoriteButton
-              fdcId={food.fdcId}
+              food={food}
               className={styles.favoriteBtn}
               showLabel
               iconSize={28}
@@ -44,13 +43,18 @@ export default async function FoodDetailPage({ params }: FoodDetailPageProps) {
               {food.householdServingFullText && (
                 <div className={styles.servingStat}>
                   <span className={styles.servingStatLabel}>Household</span>
-                  <span className={styles.servingStatValue}>{food.householdServingFullText}</span>
+                  <span className={styles.servingStatValue}>
+                    {food.householdServingFullText}
+                  </span>
                 </div>
               )}
               {food.servingSize && food.servingSizeUnit && (
                 <div className={styles.servingStat}>
                   <span className={styles.servingStatLabel}>Weight</span>
-                  <span className={styles.servingStatValue}>{food.servingSize}{food.servingSizeUnit.toLowerCase()}</span>
+                  <span className={styles.servingStatValue}>
+                    {food.servingSize}
+                    {food.servingSizeUnit.toLowerCase()}
+                  </span>
                 </div>
               )}
             </div>

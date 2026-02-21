@@ -37,9 +37,9 @@ export interface FoodItem {
   servingSize?: number;
   servingSizeUnit?: string;
   householdServingFullText?: string;
-  foodNutrients: FoodNutrient[];
+  foodNutrients: (FoodNutrient | FoodDetailNutrient)[];
   dataType: string;
-  publishedDate: string;
+  publishedDate?: string;
   brandName?: string;
 }
 
@@ -48,4 +48,15 @@ export interface SearchResponse {
   totalHits: number;
   currentPage: number;
   totalPages: number;
+}
+
+export interface FavoriteItem {
+  fdcId: number;
+  description: string;
+  brandName?: string;
+  brandOwner?: string;
+  foodCategory?: string;
+  servingSize?: number;
+  servingSizeUnit?: string;
+  dataType: string;
 }
