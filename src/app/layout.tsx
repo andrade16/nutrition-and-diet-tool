@@ -18,6 +18,11 @@ export const metadata: Metadata = {
   description: "Track your nutrition and manage your diet effectively",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{

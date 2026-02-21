@@ -54,6 +54,20 @@
   transition: transform 0.2s ease;
 }
 
+@media (max-width: 600px) {
+  .card {
+    padding: 12px 16px;
+  }
+
+  .name {
+    font-size: 14px;
+  }
+
+  .serving {
+    display: none;
+  }
+}
+
 @media (hover: hover) and (pointer: fine) {
   .card:hover {
     border-color: #bbb;

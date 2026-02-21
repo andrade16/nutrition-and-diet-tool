@@ -40,19 +40,25 @@ export default function SearchResults({
           {totalHits} results for &ldquo;{query}&rdquo;
         </p>
         <div className={styles.pagination}>
-          {currentPage > 1 && (
-            <Link className={styles.pageLink} href={`/search?query=${query}&page=${currentPage - 1}`}>
-              ← Prev
-            </Link>
-          )}
+          <Link
+            className={`${styles.pageLink} ${currentPage <= 1 ? styles.pageLinkDisabled : ""}`}
+            href={`/search?query=${query}&page=${currentPage - 1}`}
+            aria-disabled={currentPage <= 1}
+            tabIndex={currentPage <= 1 ? -1 : undefined}
+          >
+            ← Prev
+          </Link>
           <span className={styles.pageIndicator}>
             {currentPage} of {totalPages}
           </span>
-          {currentPage < totalPages && (
-            <Link className={styles.pageLink} href={`/search?query=${query}&page=${currentPage + 1}`}>
-              Next →
-            </Link>
-          )}
+          <Link
+            className={`${styles.pageLink} ${currentPage >= totalPages ? styles.pageLinkDisabled : ""}`}
+            href={`/search?query=${query}&page=${currentPage + 1}`}
+            aria-disabled={currentPage >= totalPages}
+            tabIndex={currentPage >= totalPages ? -1 : undefined}
+          >
+            Next →
+          </Link>
         </div>
       </div>
       <ul className={styles.list}>

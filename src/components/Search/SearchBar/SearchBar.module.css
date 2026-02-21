@@ -135,6 +135,10 @@
     padding: 0 18px;
     font-size: 14px;
   }
+
+  .quickPicks {
+    display: none;
+  }
 }
 
 @media (prefers-color-scheme: dark) {

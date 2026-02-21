@@ -37,11 +37,17 @@
 
 @media (max-width: 600px) {
   .container {
-    padding: 48px 20px 32px;
+    padding: 24px 20px 16px;
   }
 
   .heading {
-    font-size: 28px;
+    font-size: 24px;
+    margin-bottom: 4px;
+  }
+
+  .subheading {
+    font-size: 14px;
+    margin-bottom: 16px;
   }
 }
 
