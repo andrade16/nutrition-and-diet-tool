@@ -1,0 +1,138 @@
+.nav {
+  --background: #fafafa;
+  --foreground: #fff;
+  --text-primary: #000;
+  --text-secondary: #666;
+  --border-color: #e5e5e5;
+
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background-color: var(--foreground);
+  border-bottom: 1px solid var(--border-color);
+  font-family: var(--font-geist-sans);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+  height: 64px;
+  gap: 32px;
+}
+
+/* Brand */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.brandIcon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.brandName {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.4px;
+}
+
+/* Nav links */
+.links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+}
+
+.link {
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.linkActive {
+  color: var(--text-primary);
+  background-color: var(--background);
+}
+
+/* Role section */
+.role {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.roleBadge {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background-color: var(--background);
+  border: 1px solid var(--border-color);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.changeLink {
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s ease;
+}
+
+/* Hover — non-touch only */
+@media (hover: hover) and (pointer: fine) {
+  .link:hover {
+    color: var(--text-primary);
+    background-color: var(--background);
+  }
+
+  .changeLink:hover {
+    color: var(--text-primary);
+  }
+}
+
+@media (max-width: 600px) {
+  .inner {
+    padding: 0 20px;
+    gap: 16px;
+  }
+
+  .link {
+    font-size: 14px;
+    padding: 6px 8px;
+  }
+
+  .roleBadge {
+    display: none;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .nav {
+    --background: #0a0a0a;
+    --foreground: #1a1a1a;
+    --text-primary: #ededed;
+    --text-secondary: #999;
+    --border-color: #2a2a2a;
+  }
+}

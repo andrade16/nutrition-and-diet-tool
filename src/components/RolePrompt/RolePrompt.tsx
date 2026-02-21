@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setUserRole, selectUserRole } from '@/store/slices/userSlice';
 import styles from './RolePrompt.module.css';
@@ -9,8 +10,13 @@ type Role = 'consumer' | 'dietitian';
 export default function RolePrompt() {
   const dispatch = useAppDispatch();
   const role = useAppSelector(selectUserRole);
+  const router = useRouter();
 
-  const selectRole = (selected: Role) => dispatch(setUserRole(selected));
+  const selectRole = (selected: Role) => {
+    dispatch(setUserRole(selected));
+    router.push('/search');
+  };
+
   const clearRole = () => dispatch(setUserRole(null));
 
   if (role) {
