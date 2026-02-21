@@ -12,6 +12,7 @@ function toTitleCase(str: string): string {
 }
 
 export default function FoodListItem({ food }: FoodListItemProps) {
+  console.log("FoodListItem render: ", food);
   const serving =
     food.servingSize && food.servingSizeUnit
       ? `${food.servingSize}${food.servingSizeUnit.toLowerCase()}`
@@ -20,7 +21,7 @@ export default function FoodListItem({ food }: FoodListItemProps) {
   return (
     <Link href={`/food/${food.fdcId}`} className={styles.card}>
       <div className={styles.text}>
-        <h3 className={styles.name}>{toTitleCase(food.description)}</h3>
+        <h3 className={styles.name}>{toTitleCase(food.brandName ?? food.description)}</h3>
         <p className={styles.meta}>
           {[food.brandOwner, food.foodCategory].filter(Boolean).join(" · ")}
         </p>

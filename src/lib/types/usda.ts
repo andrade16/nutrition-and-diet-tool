@@ -16,6 +16,7 @@ export interface FoodItem {
   foodNutrients: FoodNutrient[];
   dataType: string;
   publishedDate: string;
+  brandName?: string;
 }
 
 export interface SearchResponse {

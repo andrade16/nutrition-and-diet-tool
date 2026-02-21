@@ -8,11 +8,14 @@ interface SearchPageProps {
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
-  const { query } = await searchParams;
+  const { query, page } = await searchParams;
 
-  const data = query ? await searchFoods(query) : null;
+  const currentPage = Number(page) || 1;
+  const data = query ? await searchFoods(query, currentPage) : null;
+  console.log("DATA ===> ", data);
 
   const searchResults = data?.foods ?? [];
+  const totalHits = data?.totalHits ?? 0;
 
   return (
     <div className={styles.page}>
@@ -22,7 +25,13 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           Search any food to see calories, macros, and more.
         </p>
         <SearchBar initialQuery={query} />
-        <SearchResults results={searchResults} query={query} />
+        <SearchResults
+          results={searchResults}
+          totalHits={totalHits}
+          query={query}
+          currentPage={currentPage}
+          totalPages={data?.totalPages ?? 1}
+        />
       </div>
     </div>
   );
