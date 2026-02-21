@@ -11,18 +11,8 @@ function toTitleCase(str: string): string {
 }
 
 export default async function FoodDetailPage({ params }: FoodDetailPageProps) {
-  console.log("FoodDetailPage params: ", params);
   const { fdcId } = await params;
   const food = await getFoodById(fdcId);
-
-  const calories = food.foodNutrients.find((n) => n.nutrient.name === "Energy");
-  const protein = food.foodNutrients.find((n) => n.nutrient.name === "Protein");
-  const carbs = food.foodNutrients.find(
-    (n) => n.nutrient.name === "Carbohydrate, by difference",
-  );
-  const fat = food.foodNutrients.find(
-    (n) => n.nutrient.name === "Total lipid (fat)",
-  );
 
   return (
     <div className={styles.page}>
@@ -46,13 +36,7 @@ export default async function FoodDetailPage({ params }: FoodDetailPageProps) {
 
         <div className={styles.nutrition}>
           <h2 className={styles.sectionTitle}>Nutrition Facts</h2>
-          <FoodDetailView
-            food={food}
-            calories={calories}
-            protein={protein}
-            carbs={carbs}
-            fat={fat}
-          />
+          <FoodDetailView food={food} />
         </div>
       </div>
     </div>

@@ -58,6 +58,42 @@
   }
 }
 
+/* ── Consumer: secondary stats list ─────────────────────────────────────── */
+
+.secondaryList {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  background: var(--foreground);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.secondaryRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.secondaryRow:last-child {
+  border-bottom: none;
+}
+
+.secondaryLabel {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.secondaryValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
 /* ── Dietitian: nutrient table ───────────────────────────────────────────── */
 
 .table {
