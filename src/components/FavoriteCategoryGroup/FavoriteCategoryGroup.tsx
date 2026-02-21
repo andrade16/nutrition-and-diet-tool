@@ -11,6 +11,8 @@ export default function FavoriteCategoryGroup({
   category,
   items,
 }: FavoriteCategoryGroupProps) {
+  console.log("RENDERING CATEGORY:", category);
+  console.log("ITEMS IN CATEGORY:", items);
   return (
     <section className={styles.group}>
       <div className={styles.header}>

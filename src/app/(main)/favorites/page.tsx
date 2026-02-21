@@ -10,14 +10,21 @@ import styles from "./page.module.css";
 export default function FavoritesPage() {
   const favoritedFoods = useAppSelector(selectFavoritedFoods);
 
-  // TODO: Implement grouping logic
-  // Group favoritedFoods by foodCategory.
-  // Items without a category should fall under "Uncategorized" at the end.
-  // Expected shape: Record<string, FavoriteItem[]>
   const grouped: Record<string, FavoriteItem[]> = {};
+  for (const item of favoritedFoods as FavoriteItem[]) {
+    const key = item.foodCategory || "Uncategorized";
+    if (!grouped[key]) grouped[key] = [];
+    grouped[key].push(item);
+  }
+
+  // always render "Uncategorized" last
+  const sorted = Object.entries(grouped).sort(([a], [b]) => {
+    if (a === "Uncategorized") return 1;
+    if (b === "Uncategorized") return -1;
+    return a.localeCompare(b);
+  });
 
   const isEmpty = favoritedFoods.length === 0;
-  const groupEntries = Object.entries(grouped);
 
   return (
     <div className={styles.page}>
@@ -36,13 +43,13 @@ export default function FavoritesPage() {
             <p className={styles.emptySubtext}>
               Search for foods and tap the heart icon to save them here.
             </p>
-            <Link href="/search" className={styles.searchLink}>
+            <Link href='/search' className={styles.searchLink}>
               Search foods
             </Link>
           </div>
         ) : (
           <div className={styles.groups}>
-            {groupEntries.map(([category, items]) => (
+            {sorted.map(([category, items]) => (
               <FavoriteCategoryGroup
                 key={category}
                 category={category}
