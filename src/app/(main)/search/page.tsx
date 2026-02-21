@@ -12,7 +12,6 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   const data = query ? await searchFoods(query) : null;
 
-  console.log("Search results:", data);
   const searchResults = data?.foods ?? [];
 
   return (
