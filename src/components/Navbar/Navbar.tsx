@@ -12,7 +12,7 @@ type Role = "consumer" | "dietitian";
 
 const NAV_LINKS = [
   { href: "/search", label: "Search" },
-  { href: "/meal-planner", label: "Meal Planner" },
+  { href: "/favorites", label: "Favorites" },
   { href: "/assessment", label: "Assessment", dietitianOnly: true },
 ];
 

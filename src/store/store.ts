@@ -10,18 +10,12 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import userReducer from "./slices/userSlice";
-import nutritionReducer from "./slices/nutritionSlice";
 import favoritesReducer from "./slices/favoritesSlice";
 
 const userPersistConfig = {
   key: "user",
   storage,
   whitelist: ["role"], // only persist role, not auth state
-};
-
-const nutritionPersistConfig = {
-  key: "nutrition",
-  storage,
 };
 
 const favoritesPersistConfig = {
@@ -33,7 +27,6 @@ export const makeStore = () =>
   configureStore({
     reducer: {
       user: persistReducer(userPersistConfig, userReducer),
-      nutrition: persistReducer(nutritionPersistConfig, nutritionReducer),
       favorites: persistReducer(favoritesPersistConfig, favoritesReducer),
     },
     middleware: (getDefaultMiddleware) =>

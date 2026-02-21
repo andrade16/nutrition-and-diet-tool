@@ -37,7 +37,7 @@ export interface FoodItem {
   servingSize?: number;
   servingSizeUnit?: string;
   householdServingFullText?: string;
-  foodNutrients: (FoodNutrient | FoodDetailNutrient)[];
+  foodNutrients?: (FoodNutrient | FoodDetailNutrient)[];
   dataType: string;
   publishedDate?: string;
   brandName?: string;
