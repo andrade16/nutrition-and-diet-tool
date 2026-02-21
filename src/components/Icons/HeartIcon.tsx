@@ -1,15 +1,16 @@
 interface HeartIconProps {
   isFavorited: boolean;
   className?: string;
+  size?: number;
 }
 
-export default function HeartIcon({ isFavorited, className }: HeartIconProps) {
+export default function HeartIcon({ isFavorited, className, size = 20 }: HeartIconProps) {
   return (
     <svg
       className={className}
       xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
+      width={size}
+      height={size}
       viewBox="0 0 24 24"
       fill={isFavorited ? "#ef4444" : "none"}
       stroke={isFavorited ? "#ef4444" : "currentColor"}

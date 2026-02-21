@@ -26,6 +26,7 @@ export interface FoodDetail {
   householdServingFullText?: string;
   foodCategory?: string;
   foodNutrients: FoodDetailNutrient[];
+  ingredients?: string;
 }
 
 export interface FoodItem {
