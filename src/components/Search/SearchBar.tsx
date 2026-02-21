@@ -58,7 +58,11 @@ export default function SearchBar({ initialQuery = "" }: SearchBarProps) {
             type='text'
             placeholder='Search for a food...'
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              setQuery(value);
+              if (!value) router.push('/search');
+            }}
             onKeyDown={handleKeyDown}
             autoFocus
           />

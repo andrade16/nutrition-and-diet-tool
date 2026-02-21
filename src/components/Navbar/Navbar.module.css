@@ -73,30 +73,84 @@
   background-color: var(--background);
 }
 
-/* Role section */
-.role {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+/* Role dropdown */
+.roleMenu {
+  position: relative;
   flex-shrink: 0;
 }
 
-.roleBadge {
+.roleTrigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
   font-size: 13px;
   font-weight: 500;
+  font-family: var(--font-geist-sans);
   color: var(--text-secondary);
   background-color: var(--background);
   border: 1px solid var(--border-color);
-  padding: 4px 10px;
   border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.changeLink {
-  font-size: 13px;
+.chevron {
+  transition: transform 0.2s ease;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 148px;
+  background: var(--foreground);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  z-index: 200;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 14px;
+  font-family: var(--font-geist-sans);
   color: var(--text-secondary);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  transition: color 0.2s ease;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  text-align: left;
+}
+
+.dropdownItemActive {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.dropdownItemActive .dropdownDot {
+  background-color: var(--text-primary);
+}
+
+.dropdownDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: 1.5px solid var(--border-color);
+  flex-shrink: 0;
+  transition: background-color 0.15s ease;
 }
 
 /* Hover — non-touch only */
@@ -106,7 +160,13 @@
     background-color: var(--background);
   }
 
-  .changeLink:hover {
+  .roleTrigger:hover {
+    color: var(--text-primary);
+    border-color: #999;
+  }
+
+  .dropdownItem:hover {
+    background-color: var(--background);
     color: var(--text-primary);
   }
 }
@@ -122,7 +182,7 @@
     padding: 6px 8px;
   }
 
-  .roleBadge {
+  .roleTrigger {
     display: none;
   }
 }
@@ -134,5 +194,9 @@
     --text-primary: #ededed;
     --text-secondary: #999;
     --border-color: #2a2a2a;
+  }
+
+  .dropdown {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   }
 }

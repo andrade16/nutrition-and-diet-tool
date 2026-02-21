@@ -1,10 +1,13 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useAppSelector } from '@/store/hooks';
-import { selectUserRole } from '@/store/slices/userSlice';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { selectUserRole, setUserRole } from '@/store/slices/userSlice';
 import styles from './Navbar.module.css';
+
+type Role = 'consumer' | 'dietitian';
 
 const NAV_LINKS = [
   { href: '/search', label: 'Search' },
@@ -12,9 +15,33 @@ const NAV_LINKS = [
   { href: '/assessment', label: 'Assessment', dietitianOnly: true },
 ];
 
+const ROLES: { value: Role; label: string }[] = [
+  { value: 'consumer', label: 'Consumer' },
+  { value: 'dietitian', label: 'Dietitian' },
+];
+
 export default function Navbar() {
   const pathname = usePathname();
+  const dispatch = useAppDispatch();
   const role = useAppSelector(selectUserRole);
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleRoleSelect = (selected: Role) => {
+    dispatch(setUserRole(selected));
+    setIsOpen(false);
+  };
 
   return (
     <nav className={styles.nav}>
@@ -39,18 +66,46 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <div className={styles.role}>
-          {role && (
-            <>
-              <span className={styles.roleBadge}>
-                {role === 'consumer' ? 'Consumer' : 'Dietitian'}
-              </span>
-              <Link href='/' className={styles.changeLink}>
-                Change
-              </Link>
-            </>
-          )}
-        </div>
+        {role && (
+          <div className={styles.roleMenu} ref={dropdownRef}>
+            <button
+              className={styles.roleTrigger}
+              onClick={() => setIsOpen((prev) => !prev)}
+              aria-expanded={isOpen}
+            >
+              {role === 'consumer' ? 'Consumer' : 'Dietitian'}
+              <svg
+                className={`${styles.chevron} ${isOpen ? styles.chevronOpen : ''}`}
+                xmlns='http://www.w3.org/2000/svg'
+                width='14'
+                height='14'
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='currentColor'
+                strokeWidth='2'
+                strokeLinecap='round'
+                strokeLinejoin='round'
+              >
+                <polyline points='6 9 12 15 18 9' />
+              </svg>
+            </button>
+
+            {isOpen && (
+              <div className={styles.dropdown}>
+                {ROLES.map(({ value, label }) => (
+                  <button
+                    key={value}
+                    className={`${styles.dropdownItem} ${role === value ? styles.dropdownItemActive : ''}`}
+                    onClick={() => handleRoleSelect(value)}
+                  >
+                    <span className={styles.dropdownDot} />
+                    {label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </nav>
   );
