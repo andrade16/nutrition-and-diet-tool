@@ -12,6 +12,7 @@ import storage from "redux-persist/lib/storage";
 import userReducer from "./slices/userSlice";
 import favoritesReducer from "./slices/favoritesSlice";
 import chatReducer from "./slices/chatSlice";
+import searchReducer from "./slices/searchSlice";
 
 const userPersistConfig = {
   key: "user",
@@ -29,12 +30,18 @@ const chatPersistConfig = {
   storage,
 };
 
+const searchPersistConfig = {
+  key: "search",
+  storage,
+};
+
 export const makeStore = () =>
   configureStore({
     reducer: {
       user: persistReducer(userPersistConfig, userReducer),
       favorites: persistReducer(favoritesPersistConfig, favoritesReducer),
       chat: persistReducer(chatPersistConfig, chatReducer),
+      search: persistReducer(searchPersistConfig, searchReducer),
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({

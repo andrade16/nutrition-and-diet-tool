@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import SearchBar from "@/components/Search/SearchBar/SearchBar";
 import SearchResults from "@/components/Search/SearchResults/SearchResults";
 import styles from "./page.module.css";
@@ -10,8 +11,14 @@ interface SearchPageProps {
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const { query, page } = await searchParams;
 
+  // Fall back to the last search cookie so results render in a single request
+  const cookieStore = await cookies();
+  const effectiveQuery = query || cookieStore.get("lastSearchQuery")?.value;
+
   const currentPage = Number(page) || 1;
-  const data = query ? await searchFoods(query, currentPage) : null;
+  const data = effectiveQuery
+    ? await searchFoods(effectiveQuery, currentPage)
+    : null;
 
   const searchResults = data?.foods ?? [];
   const totalHits = data?.totalHits ?? 0;
@@ -23,11 +30,11 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         <p className={styles.subheading}>
           Search any food to see calories, macros, and more.
         </p>
-        <SearchBar initialQuery={query} />
+        <SearchBar initialQuery={effectiveQuery} />
         <SearchResults
           results={searchResults}
           totalHits={totalHits}
-          query={query}
+          query={effectiveQuery}
           currentPage={currentPage}
           totalPages={data?.totalPages ?? 1}
         />

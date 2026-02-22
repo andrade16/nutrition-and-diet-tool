@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setLastQuery, selectLastQuery } from "@/store/slices/searchSlice";
 import styles from "./SearchBar.module.css";
 import SearchIcon from "@/components/Icons/SearchIcon";
 import ClearSearchIcon from "@/components/Icons/ClearSearchIcon";
@@ -23,12 +25,24 @@ interface SearchBarProps {
 
 export default function SearchBar({ initialQuery = "" }: SearchBarProps) {
   const router = useRouter();
-  const [query, setQuery] = useState(initialQuery);
+  const dispatch = useAppDispatch();
+  const lastQuery = useAppSelector(selectLastQuery);
+  // Pre-fill with the last query if there's nothing in the URL
+  const [query, setQuery] = useState(initialQuery || lastQuery);
 
   const submit = (value: string) => {
     const trimmed = value.trim();
     if (!trimmed) return;
+    document.cookie = `lastSearchQuery=${encodeURIComponent(trimmed)}; path=/; max-age=300`;
+    dispatch(setLastQuery(trimmed));
     router.push(`/search?query=${encodeURIComponent(trimmed)}`);
+  };
+
+  const clear = () => {
+    document.cookie = "lastSearchQuery=; path=/; max-age=0";
+    dispatch(setLastQuery(""));
+    setQuery("");
+    router.push("/search");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -48,7 +62,7 @@ export default function SearchBar({ initialQuery = "" }: SearchBarProps) {
             onChange={(e) => {
               const value = e.target.value;
               setQuery(value);
-              if (!value) router.push("/search");
+              if (!value) clear();
             }}
             onKeyDown={handleKeyDown}
             autoFocus
@@ -57,10 +71,7 @@ export default function SearchBar({ initialQuery = "" }: SearchBarProps) {
           {query && (
             <button
               className={styles.clearBtn}
-              onClick={() => {
-                setQuery("");
-                router.push("/search");
-              }}
+              onClick={clear}
               aria-label='Clear search'
             >
               <ClearSearchIcon />
