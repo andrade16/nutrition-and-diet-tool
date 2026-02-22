@@ -1,0 +1,104 @@
+.pagination {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 32px 0 16px;
+  margin-top: 16px;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.button {
+  height: 28px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-family: var(--font-geist-sans);
+  color: var(--text-secondary);
+  background: var(--foreground);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.disabled {
+  opacity: 0.35;
+  pointer-events: none;
+  cursor: default;
+}
+
+.active {
+  color: var(--text-primary);
+  border-color: var(--text-primary);
+  font-weight: 500;
+}
+
+.pageNumbers {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pageButton {
+  min-width: 28px;
+  padding: 0 8px;
+}
+
+.ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.mobileIndicator {
+  display: none;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.resultsInfo {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+  text-align: center;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .button:hover:not(.disabled):not(.active) {
+    color: var(--text-primary);
+    border-color: #999;
+  }
+}
+
+@media (max-width: 600px) {
+  .pagination {
+    gap: 12px;
+    padding: 24px 0 12px;
+  }
+
+  .pageNumbers {
+    display: none;
+  }
+
+  .mobileIndicator {
+    display: block;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .button:hover:not(.disabled):not(.active) {
+    border-color: #555;
+  }
+}

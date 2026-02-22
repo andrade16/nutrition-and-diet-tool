@@ -1,7 +1,8 @@
 import type { FoodItem } from "@/lib/types/usda";
 import FoodListItem from "@/components/FoodListItem/FoodListItem";
 import styles from "./SearchResults.module.css";
-import Link from "next/link";
+import { formatNumber } from "@/lib/pagination";
+import Pagination from "@/components/Pagination/Pagination";
 
 interface SearchResultsProps {
   results: FoodItem[];
@@ -37,29 +38,8 @@ export default function SearchResults({
     <div className={styles.wrapper}>
       <div className={styles.header}>
         <p className={styles.count}>
-          {totalHits} results for &ldquo;{query}&rdquo;
+          {formatNumber(totalHits)} results for &ldquo;{query}&rdquo;
         </p>
-        <div className={styles.pagination}>
-          <Link
-            className={`${styles.pageLink} ${currentPage <= 1 ? styles.pageLinkDisabled : ""}`}
-            href={`/search?query=${query}&page=${currentPage - 1}`}
-            aria-disabled={currentPage <= 1}
-            tabIndex={currentPage <= 1 ? -1 : undefined}
-          >
-            ← Prev
-          </Link>
-          <span className={styles.pageIndicator}>
-            {currentPage} of {totalPages}
-          </span>
-          <Link
-            className={`${styles.pageLink} ${currentPage >= totalPages ? styles.pageLinkDisabled : ""}`}
-            href={`/search?query=${query}&page=${currentPage + 1}`}
-            aria-disabled={currentPage >= totalPages}
-            tabIndex={currentPage >= totalPages ? -1 : undefined}
-          >
-            Next →
-          </Link>
-        </div>
       </div>
       <ul className={styles.list}>
         {results.map((food) => (
@@ -68,6 +48,14 @@ export default function SearchResults({
           </li>
         ))}
       </ul>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalResults={totalHits}
+        baseUrl={`/search?query=${encodeURIComponent(query)}`}
+        pageSize={100}
+      />
     </div>
   );
 }

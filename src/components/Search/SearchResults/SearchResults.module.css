@@ -19,57 +19,11 @@
   white-space: nowrap;
 }
 
-.pagination {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.pageLink {
-  height: 28px;
-  padding: 0 12px;
-  display: flex;
-  align-items: center;
-  font-size: 13px;
-  font-family: var(--font-geist-sans);
-  color: var(--text-secondary);
-  background: var(--foreground);
-  border: 1px solid var(--border-color);
-  border-radius: 999px;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.pageIndicator {
-  font-size: 13px;
-  color: var(--text-secondary);
-}
-
-.pageLinkDisabled {
-  opacity: 0.35;
-  pointer-events: none;
-  cursor: default;
-}
-
 @media (max-width: 600px) {
   .header {
     flex-direction: column;
     align-items: center;
     gap: 8px;
-  }
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .pageLink:hover {
-    color: var(--text-primary);
-    border-color: #999;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .pageLink:hover {
-    border-color: #555;
   }
 }
 
