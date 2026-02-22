@@ -7,7 +7,7 @@ import {
   selectFavoritedFoods,
   addFavorite,
   removeFavorite,
-} from "@/store/slices/favoritesSlice";
+} from "@/store/slices/favorites/favoritesSlice";
 
 interface FavoriteButtonProps {
   food?: FoodItem;

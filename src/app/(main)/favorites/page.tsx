@@ -8,13 +8,13 @@ import {
   selectFavoriteIngredients,
   clearFavorites,
   clearFavoriteIngredients,
-} from "@/store/slices/favoritesSlice";
+} from "@/store/slices/favorites/favoritesSlice";
 import FavoriteCategoryGroup from "@/components/FavoriteCategoryGroup/FavoriteCategoryGroup";
 import StarIcon from "@/components/Icons/StarIcon";
 import EmptyState from "@/components/EmptyState/EmptyState";
 import type { FavoriteItem } from "@/lib/types/usda";
 import styles from "./page.module.css";
-import { selectUserRole } from "@/store/slices/userSlice";
+import { selectUserRole } from "@/store/slices/user/userSlice";
 
 export default function FavoritesPage() {
   const [activeTab, setActiveTab] = useState<"foods" | "ingredients">("foods");

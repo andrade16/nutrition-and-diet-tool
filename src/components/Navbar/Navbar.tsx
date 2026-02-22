@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { selectUserRole, setUserRole } from "@/store/slices/userSlice";
+import { selectUserRole, setUserRole } from "@/store/slices/user/userSlice";
 import styles from "./Navbar.module.css";
 import Chevron from "../Icons/Chevron";
 

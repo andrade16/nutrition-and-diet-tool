@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   selectFavoritedFoods,
   updateFavoriteNote,
-} from "../../store/slices/favoritesSlice";
+} from "../../store/slices/favorites/favoritesSlice";
 import styles from "./NoteInput.module.css";
 import { FavoriteItem } from "@/lib/types/usda";
 

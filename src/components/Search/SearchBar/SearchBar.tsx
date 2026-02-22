@@ -3,7 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setLastQuery, selectLastQuery } from "@/store/slices/searchSlice";
+import {
+  setLastQuery,
+  selectLastQuery,
+} from "@/store/slices/search/searchSlice";
 import styles from "./SearchBar.module.css";
 import SearchIcon from "@/components/Icons/SearchIcon";
 import ClearSearchIcon from "@/components/Icons/ClearSearchIcon";

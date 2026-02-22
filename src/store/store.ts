@@ -9,10 +9,10 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import userReducer from "./slices/userSlice";
-import favoritesReducer from "./slices/favoritesSlice";
-import chatReducer from "./slices/chatSlice";
-import searchReducer from "./slices/searchSlice";
+import userReducer from "./slices/user/userSlice";
+import favoritesReducer from "./slices/favorites/favoritesSlice";
+import chatReducer from "./slices/chat/chatSlice";
+import searchReducer from "./slices/search/searchSlice";
 
 const userPersistConfig = {
   key: "user",

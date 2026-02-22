@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { FavoriteItem } from "@/lib/types/usda";
-import type { RootState } from "../store";
+import type { RootState } from "../../store";
 
 interface FavoritesState {
   favoritedFoods: FavoriteItem[];

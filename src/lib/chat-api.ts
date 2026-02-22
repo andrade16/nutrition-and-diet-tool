@@ -1,4 +1,4 @@
-import type { Message } from "@/store/slices/chatSlice";
+import type { Message } from "@/store/slices/chat/chatSlice";
 
 export async function streamChatResponse(
   messages: Message[],
