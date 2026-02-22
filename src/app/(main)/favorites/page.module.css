@@ -79,6 +79,32 @@
   border-bottom-color: var(--text-primary);
 }
 
+.clearAllBtn {
+  display: block;
+  margin-left: auto;
+  margin-bottom: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--text-secondary);
+  padding: 0;
+  transition: color 0.15s ease;
+}
+
+.clearAllBtn:hover {
+  color: #ef4444;
+}
+
+.ingredientContainer {
+  background: var(--foreground);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+}
+
 .ingredientList {
   list-style: none;
   padding: 0;

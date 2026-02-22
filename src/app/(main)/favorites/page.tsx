@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useAppSelector } from "@/store/hooks";
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import IngredientPill from "@/components/IngredientPill/IngredientPill";
 import {
   selectFavoritedFoods,
   selectFavoriteIngredients,
+  clearFavorites,
+  clearFavoriteIngredients,
 } from "@/store/slices/favoritesSlice";
 import FavoriteCategoryGroup from "@/components/FavoriteCategoryGroup/FavoriteCategoryGroup";
 import StarIcon from "@/components/Icons/StarIcon";
@@ -15,8 +17,19 @@ import styles from "./page.module.css";
 
 export default function FavoritesPage() {
   const [activeTab, setActiveTab] = useState<"foods" | "ingredients">("foods");
+  const dispatch = useAppDispatch();
   const favoritedFoods = useAppSelector(selectFavoritedFoods);
   const favoritedIngredients = useAppSelector(selectFavoriteIngredients);
+
+  const hasItems =
+    activeTab === "foods"
+      ? favoritedFoods.length > 0
+      : (favoritedIngredients as string[]).length > 0;
+
+  const handleClear = () => {
+    if (activeTab === "foods") dispatch(clearFavorites());
+    else dispatch(clearFavoriteIngredients());
+  };
 
   const grouped: Record<string, FavoriteItem[]> = {};
   for (const item of favoritedFoods as FavoriteItem[]) {
@@ -53,6 +66,12 @@ export default function FavoritesPage() {
           </button>
         </div>
 
+        {hasItems && (
+          <button className={styles.clearAllBtn} onClick={handleClear}>
+            Clear all
+          </button>
+        )}
+
         {activeTab === "foods" ? (
           isEmpty ? (
             <EmptyState
@@ -79,11 +98,13 @@ export default function FavoritesPage() {
             subtitle="Tap the star on any ingredient from a food's detail page."
           />
         ) : (
-          <ul className={styles.ingredientList}>
-            {(favoritedIngredients as string[]).map((name) => (
-              <IngredientPill key={name} name={name} />
-            ))}
-          </ul>
+          <div className={styles.ingredientContainer}>
+            <ul className={styles.ingredientList}>
+              {(favoritedIngredients as string[]).map((name) => (
+                <IngredientPill key={name} name={name} />
+              ))}
+            </ul>
+          </div>
         )}
       </div>
     </div>
