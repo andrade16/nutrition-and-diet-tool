@@ -12,7 +12,8 @@ import { selectUserRole } from "@/store/slices/userSlice";
 import { selectFavoritedFoods } from "@/store/slices/favoritesSlice";
 import type { FavoriteItem } from "@/lib/types/usda";
 import { streamChatResponse } from "@/lib/chat-api";
-import ReactMarkdown from "react-markdown";
+import ChatMessage from "@/components/ChatMessage/ChatMessage";
+import ChatInput from "@/components/ChatInput/ChatInput";
 import styles from "./page.module.css";
 
 const SUGGESTIONS = [
@@ -29,9 +30,7 @@ export default function ChatPage() {
   // Only updated once a full exchange (user + assistant) completes successfully.
   const persistedMessages = useAppSelector(selectMessages);
 
-  // Refs for scrolling to the bottom of the message list and auto-resizing the textarea.
   const bottomRef = useRef<HTMLDivElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const [input, setInput] = useState("");
 
@@ -79,7 +78,6 @@ export default function ChatPage() {
     setStreamingUser(content);
     setStreamingAssistant("");
     setInput("");
-    if (textareaRef.current) textareaRef.current.style.height = "auto";
     setError(null);
     setIsLoading(true);
 
@@ -128,78 +126,27 @@ export default function ChatPage() {
         ) : (
           <div className={styles.messageList}>
             {displayMessages.map((msg, i) => (
-              <div
+              <ChatMessage
                 key={i}
-                className={`${styles.message} ${msg.role === "user" ? styles.user : styles.assistant}`}
-              >
-                <div className={styles.bubble}>
-                  {msg.content === "" && isLoading ? (
-                    <span className={styles.thinking}>
-                      <span />
-                      <span />
-                      <span />
-                    </span>
-                  ) : msg.role === "assistant" ? (
-                    <div className='prose'>
-                      <ReactMarkdown>{msg.content}</ReactMarkdown>
-                    </div>
-                  ) : (
-                    msg.content
-                  )}
-                </div>
-              </div>
+                role={msg.role}
+                content={msg.content}
+                isLoading={isLoading}
+              />
             ))}
             <div ref={bottomRef} />
           </div>
         )}
       </div>
 
-      {/* Input area */}
-      <div className={styles.inputArea}>
-        <div className={styles.inputContainer}>
-          {displayMessages.length > 0 && (
-            <button
-              className={styles.newChatBtn}
-              onClick={() => dispatch(clearMessages())}
-              title='New chat'
-            >
-              ↺
-            </button>
-          )}
-          <textarea
-            ref={textareaRef}
-            className={styles.textarea}
-            value={input}
-            rows={1}
-            onChange={(e) => {
-              setInput(e.target.value);
-              e.target.style.height = "auto";
-              e.target.style.height =
-                Math.min(e.target.scrollHeight, 200) + "px";
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-              }
-            }}
-            placeholder='Ask about nutrition, meal planning, dietary advice...'
-            disabled={isLoading}
-          />
-          <button
-            className={styles.sendBtn}
-            onClick={() => sendMessage()}
-            disabled={isLoading || !input.trim()}
-            aria-label='Send'
-          >
-            <svg width='16' height='16' viewBox='0 0 24 24' fill='currentColor'>
-              <path d='M2.01 21L23 12 2.01 3 2 10l15 2-15 2z' />
-            </svg>
-          </button>
-        </div>
-        {error && <p className={styles.error}>{error}</p>}
-        <p className={styles.hint}>Enter to send · Shift+Enter for new line</p>
-      </div>
+      <ChatInput
+        value={input}
+        onChange={setInput}
+        onSend={sendMessage}
+        onNewChat={() => dispatch(clearMessages())}
+        isLoading={isLoading}
+        showNewChat={displayMessages.length > 0}
+        error={error}
+      />
     </div>
   );
 }

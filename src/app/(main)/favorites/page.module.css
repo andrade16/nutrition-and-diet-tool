@@ -24,65 +24,10 @@
   margin-bottom: 24px;
 }
 
-.subheading {
-  font-size: 16px;
-  color: var(--text-secondary);
-  margin-bottom: 32px;
-}
-
 .groups {
   display: flex;
   flex-direction: column;
   gap: 40px;
-}
-
-.empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 80px 0;
-  text-align: center;
-  gap: 12px;
-}
-
-.emptyIcon {
-  font-size: 48px;
-  color: var(--text-secondary);
-  line-height: 1;
-  margin-bottom: 8px;
-}
-
-.emptyText {
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0;
-}
-
-.emptySubtext {
-  font-size: 15px;
-  color: var(--text-secondary);
-  margin: 0;
-  max-width: 300px;
-}
-
-.searchLink {
-  display: inline-block;
-  margin-top: 8px;
-  padding: 10px 24px;
-  background: var(--text-primary);
-  color: var(--background);
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: opacity 0.2s ease;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .searchLink:hover {
-    opacity: 0.8;
-  }
 }
 
 @media (max-width: 600px) {

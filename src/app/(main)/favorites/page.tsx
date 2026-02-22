@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useAppSelector } from "@/store/hooks";
 import IngredientPill from "@/components/IngredientPill/IngredientPill";
 import {
@@ -10,6 +9,7 @@ import {
 } from "@/store/slices/favoritesSlice";
 import FavoriteCategoryGroup from "@/components/FavoriteCategoryGroup/FavoriteCategoryGroup";
 import StarIcon from "@/components/Icons/StarIcon";
+import EmptyState from "@/components/EmptyState/EmptyState";
 import type { FavoriteItem } from "@/lib/types/usda";
 import styles from "./page.module.css";
 
@@ -25,7 +25,7 @@ export default function FavoritesPage() {
     grouped[key].push(item);
   }
 
-  // always render "Uncategorized" last
+  // Always render "Uncategorized" last
   const sorted = Object.entries(grouped).sort(([a], [b]) => {
     if (a === "Uncategorized") return 1;
     if (b === "Uncategorized") return -1;
@@ -52,26 +52,15 @@ export default function FavoritesPage() {
             Ingredients · {(favoritedIngredients as string[]).length}
           </button>
         </div>
-        {/* <p className={styles.subheading}>
-          {isEmpty
-            ? "Foods you save will appear here."
-            : `${favoritedFoods.length} saved food${favoritedFoods.length !== 1 ? "s" : ""}`}
-        </p> */}
 
         {activeTab === "foods" ? (
-          favoritedFoods.length === 0 ? (
-            <div className={styles.empty}>
-              <span className={styles.emptyIcon}>
-                <StarIcon size={48} />
-              </span>
-              <p className={styles.emptyText}>No favorited foods yet</p>
-              <p className={styles.emptySubtext}>
-                Search for foods and tap the star icon to save them here.
-              </p>
-              <Link href='/search' className={styles.searchLink}>
-                Search foods
-              </Link>
-            </div>
+          isEmpty ? (
+            <EmptyState
+              icon={<StarIcon size={48} />}
+              title='No favorited foods yet'
+              subtitle='Search for foods and tap the star icon to save them here.'
+              action={{ label: "Search foods", href: "/search" }}
+            />
           ) : (
             <div className={styles.groups}>
               {sorted.map(([category, items]) => (
@@ -84,15 +73,11 @@ export default function FavoritesPage() {
             </div>
           )
         ) : (favoritedIngredients as string[]).length === 0 ? (
-          <div className={styles.empty}>
-            <span className={styles.emptyIcon}>
-              <StarIcon size={48} />
-            </span>
-            <p className={styles.emptyText}>No saved ingredients yet</p>
-            <p className={styles.emptySubtext}>
-              Tap the star on any ingredient from a food's detail page.
-            </p>
-          </div>
+          <EmptyState
+            icon={<StarIcon size={48} />}
+            title='No saved ingredients yet'
+            subtitle="Tap the star on any ingredient from a food's detail page."
+          />
         ) : (
           <ul className={styles.ingredientList}>
             {(favoritedIngredients as string[]).map((name) => (
@@ -100,31 +85,6 @@ export default function FavoritesPage() {
             ))}
           </ul>
         )}
-
-        {/* {isEmpty ? (
-          <div className={styles.empty}>
-            <span className={styles.emptyIcon}>
-              <StarIcon size={48} />
-            </span>
-            <p className={styles.emptyText}>No favorited foods yet</p>
-            <p className={styles.emptySubtext}>
-              Search for foods and tap the star icon to save them here.
-            </p>
-            <Link href='/search' className={styles.searchLink}>
-              Search foods
-            </Link>
-          </div>
-        ) : (
-          <div className={styles.groups}>
-            {sorted.map(([category, items]) => (
-              <FavoriteCategoryGroup
-                key={category}
-                category={category}
-                items={items}
-              />
-            ))}
-          </div>
-        )} */}
       </div>
     </div>
   );
