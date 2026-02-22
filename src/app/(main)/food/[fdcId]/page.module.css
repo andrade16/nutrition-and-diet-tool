@@ -89,6 +89,10 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--text-secondary);
+  margin: 0 0 12px 0;
+}
+
+.sectionTitleRow .sectionTitle {
   margin: 0;
 }
 
