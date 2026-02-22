@@ -1,7 +1,7 @@
 "use client";
 
 import StarIcon from "@/components/Icons/StarIcon";
-import { FoodItem, FavoriteItem } from "@/lib/types/usda";
+import type { FoodItem, FavoriteItem } from "@/lib/types/usda";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import {
   selectFavoritedFoods,
@@ -23,9 +23,9 @@ export default function FavoriteButton({
   iconSize = 20,
 }: FavoriteButtonProps) {
   const dispatch = useAppDispatch();
-  const favoritedFoods = useAppSelector(selectFavoritedFoods);
+  const favoritedFoods = useAppSelector(selectFavoritedFoods) as FavoriteItem[];
   const isFavorited = favoritedFoods.some(
-    (favoritedFood: FoodItem) => favoritedFood.fdcId === food?.fdcId,
+    (favoritedFood) => favoritedFood.fdcId === food?.fdcId,
   );
 
   if (!food) return null;

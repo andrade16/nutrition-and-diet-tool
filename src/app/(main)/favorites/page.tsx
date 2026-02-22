@@ -20,13 +20,13 @@ export default function FavoritesPage() {
   const [activeTab, setActiveTab] = useState<"foods" | "ingredients">("foods");
   const dispatch = useAppDispatch();
   const favoritedFoods = useAppSelector(selectFavoritedFoods);
-  const favoritedIngredients = useAppSelector(selectFavoriteIngredients);
+  const favoritedIngredients = useAppSelector(selectFavoriteIngredients) as string[];
   const role = useAppSelector(selectUserRole);
 
   const hasItems =
     activeTab === "foods"
       ? favoritedFoods.length > 0
-      : (favoritedIngredients as string[]).length > 0;
+      : favoritedIngredients.length > 0;
 
   const handleClear = () => {
     if (activeTab === "foods") dispatch(clearFavorites());
@@ -34,7 +34,7 @@ export default function FavoritesPage() {
   };
 
   const grouped: Record<string, FavoriteItem[]> = {};
-  for (const item of favoritedFoods as FavoriteItem[]) {
+  for (const item of favoritedFoods) {
     const key = item.foodCategory || "Uncategorized";
     if (!grouped[key]) grouped[key] = [];
     grouped[key].push(item);
@@ -58,13 +58,13 @@ export default function FavoritesPage() {
             className={`${styles.tab} ${activeTab === "foods" ? styles.activeTab : ""}`}
             onClick={() => setActiveTab("foods")}
           >
-            Foods · {(favoritedFoods as FavoriteItem[]).length}
+            Foods · {favoritedFoods.length}
           </button>
           <button
             className={`${styles.tab} ${activeTab === "ingredients" ? styles.activeTab : ""}`}
             onClick={() => setActiveTab("ingredients")}
           >
-            Ingredients · {(favoritedIngredients as string[]).length}
+            Ingredients · {favoritedIngredients.length}
           </button>
         </div>
 
@@ -94,7 +94,7 @@ export default function FavoritesPage() {
               ))}
             </div>
           )
-        ) : (favoritedIngredients as string[]).length === 0 ? (
+        ) : favoritedIngredients.length === 0 ? (
           <EmptyState
             icon={<StarIcon size={48} />}
             title='No saved ingredients yet'
@@ -103,7 +103,7 @@ export default function FavoritesPage() {
         ) : (
           <div className={styles.ingredientContainer}>
             <ul className={styles.ingredientList}>
-              {(favoritedIngredients as string[]).map((name) => (
+              {favoritedIngredients.map((name) => (
                 <IngredientPill key={name} name={name} />
               ))}
             </ul>

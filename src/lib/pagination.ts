@@ -59,9 +59,6 @@ export function getResultsRange(
   return { start, end };
 }
 
-/**
- * Format large numbers with commas
- */
 export function formatNumber(num: number): string {
   return num.toLocaleString();
 }

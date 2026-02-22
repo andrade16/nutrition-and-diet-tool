@@ -7,28 +7,23 @@ interface FavoritesState {
   favoritedIngredients: string[];
 }
 
-// Initial state
 const initialState: FavoritesState = {
   favoritedFoods: [],
   favoritedIngredients: [],
 };
 
-// Create the slice
 export const favoritesSlice = createSlice({
   name: "favorites",
   initialState,
   reducers: {
-    // Add a favorite food item to the list
     addFavorite: (state, action: PayloadAction<FavoriteItem>) => {
       state.favoritedFoods.push(action.payload);
     },
-    // Remove a favorite food item by FDC ID
     removeFavorite: (state, action: PayloadAction<number>) => {
       state.favoritedFoods = state.favoritedFoods.filter(
         (food) => food.fdcId !== action.payload,
       );
     },
-    // Clear all favorite food items
     clearFavorites: (state) => {
       state.favoritedFoods = [];
     },

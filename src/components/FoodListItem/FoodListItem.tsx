@@ -6,6 +6,7 @@ import styles from "./FoodListItem.module.css";
 import RightArrow from "../Icons/RightArrow";
 import FavoriteButton from "../FavoriteButton/FavoriteButton";
 import { toTitleCase } from "@/lib/strings";
+
 interface FoodListItemProps {
   food: FoodItem;
 }

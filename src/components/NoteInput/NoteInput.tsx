@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   selectFavoritedFoods,
   updateFavoriteNote,
-} from "../../store/slices/favorites/favoritesSlice";
+} from "@/store/slices/favorites/favoritesSlice";
+import type { FavoriteItem } from "@/lib/types/usda";
 import styles from "./NoteInput.module.css";
-import { FavoriteItem } from "@/lib/types/usda";
 
 export default function NoteInput({ fdcId }: { fdcId: number }) {
   const dispatch = useAppDispatch();
