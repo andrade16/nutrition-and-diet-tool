@@ -20,11 +20,8 @@ export const userSlice = createSlice({
   },
 });
 
-// Export actions
 export const { setUserRole } = userSlice.actions;
 
-// Export selectors
 export const selectUserRole = (state: RootState) => state.user.role;
 
-// Export reducer
 export default userSlice.reducer;
