@@ -1,10 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useAppSelector } from "@/store/hooks";
 import { selectUserRole } from "@/store/slices/userSlice";
 import { selectFavoritedFoods } from "@/store/slices/favoritesSlice";
 import type { FavoriteItem } from "@/lib/types/usda";
+import ReactMarkdown from "react-markdown";
+import styles from "./page.module.css";
+
+const SUGGESTIONS = [
+  "What are some high-protein breakfast ideas?",
+  "How much fiber should I eat per day?",
+  "What foods are high in iron?",
+  "Suggest a balanced meal plan for weight loss",
+];
 
 type Message = {
   role: "user" | "assistant";
@@ -22,19 +31,24 @@ export default function ChatPage() {
     (food: FavoriteItem) => food.description,
   );
 
-  async function sendMessage() {
-    const text = input.trim();
-    if (!text || isLoading) return;
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-    const userMessage: Message = { role: "user", content: text };
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  async function sendMessage(text?: string) {
+    const content = (text ?? input).trim();
+    if (!content || isLoading) return;
+
+    const userMessage: Message = { role: "user", content };
     const updatedMessages = [...messages, userMessage];
 
-    setMessages(updatedMessages);
+    setMessages([...updatedMessages, { role: "assistant", content: "" }]);
     setInput("");
+    if (textareaRef.current) textareaRef.current.style.height = "auto";
     setIsLoading(true);
-
-    // Append an empty assistant message — we'll fill it in as the stream arrives
-    setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
 
     const res = await fetch("/api/chat", {
       method: "POST",
@@ -69,40 +83,96 @@ export default function ChatPage() {
   }
 
   return (
-    <div>
-      {/* Message list */}
-      <div>
-        {messages.map((msg, i) => (
-          <div key={i}>
-            <strong>{msg.role === "user" ? "You" : "AI"}:</strong>
-            <p>{msg.content}</p>
+    <div className={styles.page}>
+      {/* Messages area */}
+      <div className={styles.messages}>
+        {messages.length === 0 ? (
+          <div className={styles.emptyState}>
+            <p className={styles.emptyTitle}>What can I help you with?</p>
+            <div className={styles.suggestions}>
+              {SUGGESTIONS.map((s) => (
+                <button
+                  key={s}
+                  className={styles.suggestion}
+                  onClick={() => sendMessage(s)}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
           </div>
-        ))}
-        {isLoading && messages[messages.length - 1]?.content === "" && (
-          <p>Thinking...</p>
+        ) : (
+          <div className={styles.messageList}>
+            {messages.map((msg, i) => (
+              <div
+                key={i}
+                className={`${styles.message} ${msg.role === "user" ? styles.user : styles.assistant}`}
+              >
+                <div className={styles.bubble}>
+                  {msg.content === "" && isLoading ? (
+                    <span className={styles.thinking}>
+                      <span />
+                      <span />
+                      <span />
+                    </span>
+                  ) : msg.role === "assistant" ? (
+                    <div className="prose"><ReactMarkdown>{msg.content}</ReactMarkdown></div>
+                  ) : (
+                    msg.content
+                  )}
+                </div>
+              </div>
+            ))}
+            <div ref={bottomRef} />
+          </div>
         )}
       </div>
 
-      {/* Input */}
-      <textarea
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-          }
-        }}
-        placeholder='Ask about nutrition, meal planning, dietary advice...'
-        disabled={isLoading}
-      />
-      <button onClick={sendMessage} disabled={isLoading || !input.trim()}>
-        Send
-      </button>
-
-      {messages.length > 0 && (
-        <button onClick={() => setMessages([])}>New Chat</button>
-      )}
+      {/* Input area */}
+      <div className={styles.inputArea}>
+        <div className={styles.inputContainer}>
+          {messages.length > 0 && (
+            <button
+              className={styles.newChatBtn}
+              onClick={() => setMessages([])}
+              title="New chat"
+            >
+              ↺
+            </button>
+          )}
+          <textarea
+            ref={textareaRef}
+            className={styles.textarea}
+            value={input}
+            rows={1}
+            onChange={(e) => {
+              setInput(e.target.value);
+              e.target.style.height = "auto";
+              e.target.style.height =
+                Math.min(e.target.scrollHeight, 200) + "px";
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+              }
+            }}
+            placeholder="Ask about nutrition, meal planning, dietary advice..."
+            disabled={isLoading}
+          />
+          <button
+            className={styles.sendBtn}
+            onClick={() => sendMessage()}
+            disabled={isLoading || !input.trim()}
+            aria-label="Send"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+            </svg>
+          </button>
+        </div>
+        <p className={styles.hint}>Enter to send · Shift+Enter for new line</p>
+      </div>
     </div>
   );
 }

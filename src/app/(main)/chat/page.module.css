@@ -1,3 +1,294 @@
 .page {
-  min-height: calc(100dvh - 64px);
+  --background: #fafafa;
+  --foreground: #fff;
+  --text-primary: #000;
+  --text-secondary: #666;
+  --border-color: #e5e5e5;
+
+  display: flex;
+  flex-direction: column;
+  height: calc(100dvh - 64px);
+  background: var(--background);
+  font-family: var(--font-geist-sans);
+}
+
+/* ── Messages ─────────────────────────────────────── */
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px 20px 16px;
+}
+
+.messageList {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.message {
+  display: flex;
+}
+
+.message.user {
+  justify-content: flex-end;
+}
+
+.message.assistant {
+  justify-content: flex-start;
+}
+
+.bubble {
+  font-size: 15px;
+  line-height: 1.65;
+  max-width: 80%;
+  word-break: break-word;
+}
+
+.user .bubble {
+  background: var(--text-primary);
+  color: var(--background);
+  padding: 10px 16px;
+  border-radius: 18px;
+  border-bottom-right-radius: 4px;
+}
+
+.assistant .bubble {
+  color: var(--text-primary);
+  padding: 4px 0;
+  max-width: 100%;
+}
+
+
+/* ── Thinking dots ────────────────────────────────── */
+
+.thinking {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 0;
+}
+
+.thinking span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-secondary);
+  animation: blink 1.2s infinite;
+}
+
+.thinking span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.thinking span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%,
+  80%,
+  100% {
+    opacity: 0.2;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+/* ── Empty state ──────────────────────────────────── */
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 28px;
+  text-align: center;
+}
+
+.emptyTitle {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  max-width: 560px;
+}
+
+.suggestion {
+  background: var(--foreground);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 9px 16px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+/* ── Input area ───────────────────────────────────── */
+
+.inputArea {
+  flex-shrink: 0;
+  padding: 12px 20px 20px;
+}
+
+.inputContainer {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  background: var(--foreground);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 10px 10px 10px 14px;
+  transition: border-color 0.15s ease;
+}
+
+.inputContainer:focus-within {
+  border-color: #bbb;
+}
+
+.textarea {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--text-primary);
+  resize: none;
+  line-height: 1.5;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 2px 0;
+}
+
+.textarea::placeholder {
+  color: var(--text-secondary);
+}
+
+.textarea:disabled {
+  opacity: 0.6;
+}
+
+.sendBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: var(--text-primary);
+  color: var(--background);
+  flex-shrink: 0;
+  transition: opacity 0.15s ease;
+}
+
+.sendBtn:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.newChatBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: none;
+  color: var(--text-secondary);
+  font-size: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+  margin-bottom: 2px;
+}
+
+.hint {
+  max-width: 720px;
+  margin: 6px auto 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+  opacity: 0.7;
+}
+
+/* ── Hover (pointer devices) ──────────────────────── */
+
+@media (hover: hover) and (pointer: fine) {
+  .suggestion:hover {
+    border-color: #bbb;
+    color: var(--text-primary);
+  }
+
+  .sendBtn:not(:disabled):hover {
+    opacity: 0.75;
+  }
+
+  .newChatBtn:hover {
+    color: var(--text-primary);
+    border-color: #bbb;
+  }
+}
+
+/* ── Mobile ───────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .messages {
+    padding: 20px 16px 12px;
+  }
+
+  .inputArea {
+    padding: 8px 16px 16px;
+  }
+
+  .bubble {
+    font-size: 14px;
+  }
+
+  .hint {
+    display: none;
+  }
+}
+
+/* ── Dark mode ────────────────────────────────────── */
+
+@media (prefers-color-scheme: dark) {
+  .page {
+    --background: #0a0a0a;
+    --foreground: #1a1a1a;
+    --text-primary: #ededed;
+    --text-secondary: #999;
+    --border-color: #2a2a2a;
+  }
+
+  .inputContainer:focus-within {
+    border-color: #444;
+  }
+
+  .suggestion:hover {
+    border-color: #444;
+  }
 }

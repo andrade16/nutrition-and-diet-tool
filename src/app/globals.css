@@ -40,3 +40,12 @@ a {
     color-scheme: dark;
   }
 }
+
+.prose { font-size: 15px; line-height: 1.65; }
+.prose p { margin: 0 0 8px; }
+.prose p:last-child { margin-bottom: 0; }
+.prose h1, .prose h2, .prose h3 { font-size: 15px; font-weight: 600; margin: 12px 0 4px; }
+.prose h1:first-child, .prose h2:first-child, .prose h3:first-child { margin-top: 0; }
+.prose ul, .prose ol { margin: 4px 0 8px; padding-left: 20px; }
+.prose li { margin-bottom: 2px; }
+.prose strong { font-weight: 600; }
