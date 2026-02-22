@@ -18,7 +18,7 @@ export const favoritesSlice = createSlice({
   name: "favorites",
   initialState,
   reducers: {
-    // Add a favorite food item by FDC ID
+    // Add a favorite food item to the list
     addFavorite: (state, action: PayloadAction<FavoriteItem>) => {
       state.favoritedFoods.push(action.payload);
     },
@@ -43,6 +43,16 @@ export const favoritesSlice = createSlice({
     clearFavoriteIngredients: (state) => {
       state.favoritedIngredients = [];
     },
+    updateFavoriteNote: (
+      state,
+      action: PayloadAction<{ fdcId: number; note: string }>,
+    ) => {
+      const { fdcId, note } = action.payload;
+      const food = state.favoritedFoods.find((food) => food.fdcId === fdcId);
+      if (food) {
+        food.note = note;
+      }
+    },
   },
 });
 
@@ -54,6 +64,7 @@ export const {
   addFavoriteIngredient,
   removeFavoriteIngredient,
   clearFavoriteIngredients,
+  updateFavoriteNote,
 } = favoritesSlice.actions;
 
 // Export selectors

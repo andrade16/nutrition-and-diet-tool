@@ -12,7 +12,9 @@ export async function streamChatResponse(
     body: JSON.stringify({ messages, role, favoritedFoods }),
   });
 
-  if (!res.ok) throw new Error(`Chat API error: ${res.status} ${res.statusText}`);
+  if (!res.ok) {
+    throw new Error(`Chat API error: ${res.status} ${res.statusText}`);
+  }
 
   const reader = res.body?.getReader();
   const decoder = new TextDecoder();
@@ -20,6 +22,7 @@ export async function streamChatResponse(
 
   while (true) {
     const { done, value } = await reader!.read();
+
     if (done) break;
 
     const chunk = decoder.decode(value, { stream: true });

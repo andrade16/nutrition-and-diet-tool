@@ -59,4 +59,5 @@ export interface FavoriteItem {
   servingSize?: number;
   servingSizeUnit?: string;
   dataType: string;
+  note?: string;
 }

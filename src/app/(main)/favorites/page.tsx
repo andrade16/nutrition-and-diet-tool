@@ -14,12 +14,14 @@ import StarIcon from "@/components/Icons/StarIcon";
 import EmptyState from "@/components/EmptyState/EmptyState";
 import type { FavoriteItem } from "@/lib/types/usda";
 import styles from "./page.module.css";
+import { selectUserRole } from "@/store/slices/userSlice";
 
 export default function FavoritesPage() {
   const [activeTab, setActiveTab] = useState<"foods" | "ingredients">("foods");
   const dispatch = useAppDispatch();
   const favoritedFoods = useAppSelector(selectFavoritedFoods);
   const favoritedIngredients = useAppSelector(selectFavoriteIngredients);
+  const role = useAppSelector(selectUserRole);
 
   const hasItems =
     activeTab === "foods"
@@ -87,6 +89,7 @@ export default function FavoritesPage() {
                   key={category}
                   category={category}
                   items={items}
+                  isDietitian={role === "dietitian"}
                 />
               ))}
             </div>

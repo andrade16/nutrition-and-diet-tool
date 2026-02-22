@@ -26,7 +26,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-        <h1 className={styles.heading}>Find nutritional info</h1>
+        <h1 className={styles.heading}>Find Nutritional Info</h1>
         <p className={styles.subheading}>
           Search any food to see calories, macros, and more.
         </p>

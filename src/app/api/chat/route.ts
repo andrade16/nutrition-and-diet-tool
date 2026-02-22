@@ -7,9 +7,6 @@ const client = new Anthropic({
 
 export async function POST(req: Request) {
   const { messages, role, favoritedFoods } = await req.json();
-  console.log("Received chat request with role:", role);
-  console.log("Favorited foods:", favoritedFoods);
-  console.log("Messages:", messages);
 
   const systemPrompt = buildSystemPrompt(role, favoritedFoods); // sets context and instructions for the ai
 

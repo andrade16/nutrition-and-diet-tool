@@ -1,15 +1,18 @@
 import type { FavoriteItem } from "@/lib/types/usda";
 import FoodListItem from "@/components/FoodListItem/FoodListItem";
+import NoteInput from "@/components/NoteInput/NoteInput";
 import styles from "./FavoriteCategoryGroup.module.css";
 
 interface FavoriteCategoryGroupProps {
   category: string;
   items: FavoriteItem[];
+  isDietitian: boolean;
 }
 
 export default function FavoriteCategoryGroup({
   category,
   items,
+  isDietitian,
 }: FavoriteCategoryGroupProps) {
   return (
     <section className={styles.group}>
@@ -19,7 +22,10 @@ export default function FavoriteCategoryGroup({
       </div>
       <div className={styles.items}>
         {items.map((item) => (
-          <FoodListItem key={item.fdcId} food={item} />
+          <div key={item.fdcId} className={`${styles.foodEntry}${isDietitian ? ` ${styles.foodEntryWithNote}` : ""}`}>
+            <FoodListItem food={item} />
+            {isDietitian && <NoteInput fdcId={item.fdcId} />}
+          </div>
         ))}
       </div>
     </section>

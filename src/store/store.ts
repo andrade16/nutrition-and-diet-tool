@@ -17,7 +17,7 @@ import searchReducer from "./slices/searchSlice";
 const userPersistConfig = {
   key: "user",
   storage,
-  whitelist: ["role"], // only persist role, not auth state
+  whitelist: ["role"],
 };
 
 const favoritesPersistConfig = {
