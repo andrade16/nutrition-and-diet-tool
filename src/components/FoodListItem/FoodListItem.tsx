@@ -29,7 +29,7 @@ export default function FoodListItem({ food }: FoodListItemProps) {
         {serving && <span className={styles.serving}>{serving}</span>}
         <FavoriteButton
           food={food}
-          className={styles.heartBtn}
+          className={styles.starBtn}
           showLabel={false}
           iconSize={20}
         />

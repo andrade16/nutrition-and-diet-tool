@@ -1,14 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { FoodItem, FavoriteItem } from "@/lib/types/usda";
+import type { FavoriteItem } from "@/lib/types/usda";
 import type { RootState } from "../store";
 
 interface FavoritesState {
   favoritedFoods: FavoriteItem[];
+  favoritedIngredients: string[];
 }
 
 // Initial state
 const initialState: FavoritesState = {
   favoritedFoods: [],
+  favoritedIngredients: [],
 };
 
 // Create the slice
@@ -30,16 +32,36 @@ export const favoritesSlice = createSlice({
     clearFavorites: (state) => {
       state.favoritedFoods = [];
     },
+    addFavoriteIngredient: (state, action: PayloadAction<string>) => {
+      state.favoritedIngredients.push(action.payload);
+    },
+    removeFavoriteIngredient: (state, action: PayloadAction<string>) => {
+      state.favoritedIngredients = state.favoritedIngredients.filter(
+        (ingredient) => ingredient !== action.payload,
+      );
+    },
+    clearFavoriteIngredients: (state) => {
+      state.favoritedIngredients = [];
+    },
   },
 });
 
 // Export actions
-export const { addFavorite, removeFavorite, clearFavorites } =
-  favoritesSlice.actions;
+export const {
+  addFavorite,
+  removeFavorite,
+  clearFavorites,
+  addFavoriteIngredient,
+  removeFavoriteIngredient,
+  clearFavoriteIngredients,
+} = favoritesSlice.actions;
 
 // Export selectors
 export const selectFavoritedFoods = (state: RootState) =>
   state.favorites.favoritedFoods;
+
+export const selectFavoriteIngredients = (state: RootState) =>
+  state.favorites.favoritedIngredients;
 
 // Export reducer
 export default favoritesSlice.reducer;

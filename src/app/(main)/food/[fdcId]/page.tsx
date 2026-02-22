@@ -1,6 +1,8 @@
 import { getFoodById } from "@/lib/usda-api";
 import FoodDetailView from "@/components/FoodDetail/FoodDetailView";
 import FavoriteButton from "@/components/FavoriteButton/FavoriteButton";
+import IngredientPill from "@/components/IngredientPill/IngredientPill";
+import InfoTooltip from "@/components/InfoTooltip/InfoTooltip";
 import { toTitleCase } from "@/lib/strings";
 import styles from "./page.module.css";
 
@@ -12,8 +14,15 @@ export default async function FoodDetailPage({ params }: FoodDetailPageProps) {
   const { fdcId } = await params;
   const food = await getFoodById(fdcId);
 
-  const foodIngredients =
-    food.ingredients?.split(",") ?? "No ingredients listed";
+  const foodIngredients = food.ingredients
+    ? [
+        ...new Set(
+          food.ingredients
+            .split(",")
+            .map((i) => toTitleCase(i.trim()).replace(".", "")),
+        ),
+      ]
+    : null;
 
   return (
     <div className={styles.page}>
@@ -62,17 +71,18 @@ export default async function FoodDetailPage({ params }: FoodDetailPageProps) {
         </div>
 
         <div className={styles.servingInfo}>
-          <h2 className={styles.sectionTitle}>Ingredients</h2>
-          {Array.isArray(foodIngredients) ? (
+          <div className={styles.sectionTitleRow}>
+            <h2 className={styles.sectionTitle}>Ingredients</h2>
+            <InfoTooltip text="Tap ★ on any ingredient to save it to your favorites" />
+          </div>
+          {foodIngredients ? (
             <ul className={styles.ingredientList}>
-              {foodIngredients.map((ingredient, index) => (
-                <li key={index}>
-                  {toTitleCase(ingredient.trim()).replace(".", "")}
-                </li>
+              {foodIngredients.map((ingredient) => (
+                <IngredientPill key={ingredient} name={ingredient} />
               ))}
             </ul>
           ) : (
-            foodIngredients
+            <p className={styles.serving}>No ingredients listed</p>
           )}
         </div>
 

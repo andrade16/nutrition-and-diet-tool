@@ -54,7 +54,7 @@
   transition: transform 0.2s ease;
 }
 
-.heartBtn {
+.starBtn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -93,7 +93,7 @@
     transform: translateX(2px);
   }
 
-  .heartBtn:hover {
+  .starBtn:hover {
     color: var(--text-primary);
   }
 }

@@ -76,13 +76,20 @@
   border-radius: 12px;
 }
 
+.sectionTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
 .sectionTitle {
   font-size: 14px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--text-secondary);
-  margin: 0 0 12px 0;
+  margin: 0;
 }
 
 .serving {
@@ -126,14 +133,6 @@
   gap: 8px;
 }
 
-.ingredientList li {
-  font-size: 13px;
-  color: var(--text-secondary);
-  background: var(--background);
-  border: 1px solid var(--border-color);
-  border-radius: 20px;
-  padding: 4px 12px;
-}
 
 .nutrition {
   margin-bottom: 40px;

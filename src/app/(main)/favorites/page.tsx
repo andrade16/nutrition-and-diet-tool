@@ -2,13 +2,20 @@
 
 import Link from "next/link";
 import { useAppSelector } from "@/store/hooks";
-import { selectFavoritedFoods } from "@/store/slices/favoritesSlice";
+import {
+  selectFavoritedFoods,
+  selectFavoriteIngredients,
+} from "@/store/slices/favoritesSlice";
 import FavoriteCategoryGroup from "@/components/FavoriteCategoryGroup/FavoriteCategoryGroup";
+import StarIcon from "@/components/Icons/StarIcon";
 import type { FavoriteItem } from "@/lib/types/usda";
 import styles from "./page.module.css";
 
 export default function FavoritesPage() {
   const favoritedFoods = useAppSelector(selectFavoritedFoods);
+  const favoritedIngredients = useAppSelector(selectFavoriteIngredients);
+  console.log("FAVORITED FOODS:", favoritedFoods);
+  console.log("FAVORITED INGREDIENTS:", favoritedIngredients);
 
   const grouped: Record<string, FavoriteItem[]> = {};
   for (const item of favoritedFoods as FavoriteItem[]) {
@@ -38,10 +45,12 @@ export default function FavoritesPage() {
 
         {isEmpty ? (
           <div className={styles.empty}>
-            <span className={styles.emptyIcon}>♡</span>
+            <span className={styles.emptyIcon}>
+              <StarIcon size={48} />
+            </span>
             <p className={styles.emptyText}>No saved foods yet</p>
             <p className={styles.emptySubtext}>
-              Search for foods and tap the heart icon to save them here.
+              Search for foods and tap the star icon to save them here.
             </p>
             <Link href='/search' className={styles.searchLink}>
               Search foods

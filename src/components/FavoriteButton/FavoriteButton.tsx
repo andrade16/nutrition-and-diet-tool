@@ -1,6 +1,6 @@
 "use client";
 
-import HeartIcon from "@/components/Icons/HeartIcon";
+import StarIcon from "@/components/Icons/StarIcon";
 import { FoodItem, FavoriteItem } from "@/lib/types/usda";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import {
@@ -54,7 +54,7 @@ export default function FavoriteButton({
         }
       }}
     >
-      <HeartIcon isFavorited={isFavorited} size={iconSize} />
+      <StarIcon isFavorited={isFavorited} size={iconSize} />
       {showLabel && <span>{isFavorited ? "Saved" : "Save"}</span>}
     </button>
   );

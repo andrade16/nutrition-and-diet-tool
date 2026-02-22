@@ -1,0 +1,56 @@
+.pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  background: var(--background);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 4px 6px 4px 12px;
+  transition: border-color 0.2s ease;
+}
+
+.name {
+  line-height: 1;
+}
+
+.starBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  color: var(--text-secondary);
+  opacity: 0;
+  transition: opacity 0.15s ease, color 0.15s ease;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.saved .starBtn {
+  opacity: 1;
+  color: var(--text-primary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .pill:hover {
+    border-color: #bbb;
+  }
+
+  .pill:hover .starBtn {
+    opacity: 1;
+  }
+
+  .starBtn:hover {
+    color: var(--text-primary);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .pill:hover {
+    border-color: #444;
+  }
+}
