@@ -11,6 +11,7 @@ import {
 import { selectUserRole } from "@/store/slices/userSlice";
 import { selectFavoritedFoods } from "@/store/slices/favoritesSlice";
 import type { FavoriteItem } from "@/lib/types/usda";
+import { streamChatResponse } from "@/lib/chat-api";
 import ReactMarkdown from "react-markdown";
 import styles from "./page.module.css";
 
@@ -23,15 +24,28 @@ const SUGGESTIONS = [
 
 export default function ChatPage() {
   const dispatch = useAppDispatch();
+
+  // Committed chat history from Redux — persisted across page reloads via redux-persist.
+  // Only updated once a full exchange (user + assistant) completes successfully.
   const persistedMessages = useAppSelector(selectMessages);
 
+  // Refs for scrolling to the bottom of the message list and auto-resizing the textarea.
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const [input, setInput] = useState("");
+
   const [isLoading, setIsLoading] = useState(false);
+
+  // The user's message for the current in-progress exchange. null means no exchange is streaming.
+  // Kept in local state (not Redux) so a failed request doesn't pollute the persisted history.
   const [streamingUser, setStreamingUser] = useState<string | null>(null);
+
+  // Accumulates the assistant's response text as chunks arrive from the stream.
+  // Replaced chunk-by-chunk; committed to Redux only when the stream finishes cleanly.
   const [streamingAssistant, setStreamingAssistant] = useState("");
+
+  const [error, setError] = useState<string | null>(null);
 
   const role = useAppSelector(selectUserRole);
   const favoritedFoods = useAppSelector(selectFavoritedFoods);
@@ -39,6 +53,9 @@ export default function ChatPage() {
     (food: FavoriteItem) => food.description,
   );
 
+  // Merges persisted history with the in-progress streaming exchange for rendering.
+  // When not streaming (streamingUser === null), just shows the committed Redux messages.
+  // When streaming, appends the live user + assistant messages so the UI updates in real time.
   const displayMessages = useMemo<Message[]>(
     () =>
       streamingUser !== null
@@ -63,37 +80,30 @@ export default function ChatPage() {
     setStreamingAssistant("");
     setInput("");
     if (textareaRef.current) textareaRef.current.style.height = "auto";
+    setError(null);
     setIsLoading(true);
 
     const messagesToSend = [...persistedMessages, { role: "user", content }];
 
-    const res = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        messages: messagesToSend,
-        favoritedFoods: favoritedFoodNames,
+    try {
+      const finalContent = await streamChatResponse(
+        messagesToSend,
         role,
-      }),
-    });
-
-    const reader = res.body?.getReader();
-    const decoder = new TextDecoder();
-    let finalContent = "";
-
-    while (true) {
-      const { done, value } = await reader!.read();
-      if (done) break;
-
-      const chunk = decoder.decode(value, { stream: true });
-      finalContent += chunk;
-      setStreamingAssistant(finalContent);
+        favoritedFoodNames,
+        (accumulated) => setStreamingAssistant(accumulated),
+      );
+      dispatch(addExchange({ user: content, assistant: finalContent }));
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Please try again.",
+      );
+    } finally {
+      setStreamingUser(null);
+      setStreamingAssistant("");
+      setIsLoading(false);
     }
-
-    dispatch(addExchange({ user: content, assistant: finalContent }));
-    setStreamingUser(null);
-    setStreamingAssistant("");
-    setIsLoading(false);
   }
 
   return (
@@ -187,6 +197,7 @@ export default function ChatPage() {
             </svg>
           </button>
         </div>
+        {error && <p className={styles.error}>{error}</p>}
         <p className={styles.hint}>Enter to send · Shift+Enter for new line</p>
       </div>
     </div>
