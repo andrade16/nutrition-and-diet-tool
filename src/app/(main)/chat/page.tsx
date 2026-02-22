@@ -1,7 +1,13 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { useAppSelector } from "@/store/hooks";
+import { useState, useRef, useEffect, useMemo } from "react";
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import {
+  addExchange,
+  clearMessages,
+  selectMessages,
+  type Message,
+} from "@/store/slices/chatSlice";
 import { selectUserRole } from "@/store/slices/userSlice";
 import { selectFavoritedFoods } from "@/store/slices/favoritesSlice";
 import type { FavoriteItem } from "@/lib/types/usda";
@@ -15,15 +21,17 @@ const SUGGESTIONS = [
   "Suggest a balanced meal plan for weight loss",
 ];
 
-type Message = {
-  role: "user" | "assistant";
-  content: string;
-};
-
 export default function ChatPage() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const dispatch = useAppDispatch();
+  const persistedMessages = useAppSelector(selectMessages);
+
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [streamingUser, setStreamingUser] = useState<string | null>(null);
+  const [streamingAssistant, setStreamingAssistant] = useState("");
 
   const role = useAppSelector(selectUserRole);
   const favoritedFoods = useAppSelector(selectFavoritedFoods);
@@ -31,30 +39,39 @@ export default function ChatPage() {
     (food: FavoriteItem) => food.description,
   );
 
-  const bottomRef = useRef<HTMLDivElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const displayMessages = useMemo<Message[]>(
+    () =>
+      streamingUser !== null
+        ? [
+            ...persistedMessages,
+            { role: "user", content: streamingUser },
+            { role: "assistant", content: streamingAssistant },
+          ]
+        : persistedMessages,
+    [persistedMessages, streamingUser, streamingAssistant],
+  );
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [displayMessages]);
 
   async function sendMessage(text?: string) {
     const content = (text ?? input).trim();
     if (!content || isLoading) return;
 
-    const userMessage: Message = { role: "user", content };
-    const updatedMessages = [...messages, userMessage];
-
-    setMessages([...updatedMessages, { role: "assistant", content: "" }]);
+    setStreamingUser(content);
+    setStreamingAssistant("");
     setInput("");
     if (textareaRef.current) textareaRef.current.style.height = "auto";
     setIsLoading(true);
+
+    const messagesToSend = [...persistedMessages, { role: "user", content }];
 
     const res = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        messages: updatedMessages,
+        messages: messagesToSend,
         favoritedFoods: favoritedFoodNames,
         role,
       }),
@@ -62,23 +79,20 @@ export default function ChatPage() {
 
     const reader = res.body?.getReader();
     const decoder = new TextDecoder();
+    let finalContent = "";
 
     while (true) {
       const { done, value } = await reader!.read();
       if (done) break;
 
       const chunk = decoder.decode(value, { stream: true });
-
-      setMessages((prev) => {
-        const next = [...prev];
-        next[next.length - 1] = {
-          role: "assistant",
-          content: (next[next.length - 1]?.content ?? "") + chunk,
-        };
-        return next;
-      });
+      finalContent += chunk;
+      setStreamingAssistant(finalContent);
     }
 
+    dispatch(addExchange({ user: content, assistant: finalContent }));
+    setStreamingUser(null);
+    setStreamingAssistant("");
     setIsLoading(false);
   }
 
@@ -86,7 +100,7 @@ export default function ChatPage() {
     <div className={styles.page}>
       {/* Messages area */}
       <div className={styles.messages}>
-        {messages.length === 0 ? (
+        {displayMessages.length === 0 ? (
           <div className={styles.emptyState}>
             <p className={styles.emptyTitle}>What can I help you with?</p>
             <div className={styles.suggestions}>
@@ -103,7 +117,7 @@ export default function ChatPage() {
           </div>
         ) : (
           <div className={styles.messageList}>
-            {messages.map((msg, i) => (
+            {displayMessages.map((msg, i) => (
               <div
                 key={i}
                 className={`${styles.message} ${msg.role === "user" ? styles.user : styles.assistant}`}
@@ -116,7 +130,9 @@ export default function ChatPage() {
                       <span />
                     </span>
                   ) : msg.role === "assistant" ? (
-                    <div className="prose"><ReactMarkdown>{msg.content}</ReactMarkdown></div>
+                    <div className='prose'>
+                      <ReactMarkdown>{msg.content}</ReactMarkdown>
+                    </div>
                   ) : (
                     msg.content
                   )}
@@ -131,11 +147,11 @@ export default function ChatPage() {
       {/* Input area */}
       <div className={styles.inputArea}>
         <div className={styles.inputContainer}>
-          {messages.length > 0 && (
+          {displayMessages.length > 0 && (
             <button
               className={styles.newChatBtn}
-              onClick={() => setMessages([])}
-              title="New chat"
+              onClick={() => dispatch(clearMessages())}
+              title='New chat'
             >
               ↺
             </button>
@@ -157,17 +173,17 @@ export default function ChatPage() {
                 sendMessage();
               }
             }}
-            placeholder="Ask about nutrition, meal planning, dietary advice..."
+            placeholder='Ask about nutrition, meal planning, dietary advice...'
             disabled={isLoading}
           />
           <button
             className={styles.sendBtn}
             onClick={() => sendMessage()}
             disabled={isLoading || !input.trim()}
-            aria-label="Send"
+            aria-label='Send'
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+            <svg width='16' height='16' viewBox='0 0 24 24' fill='currentColor'>
+              <path d='M2.01 21L23 12 2.01 3 2 10l15 2-15 2z' />
             </svg>
           </button>
         </div>

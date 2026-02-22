@@ -11,14 +11,13 @@ export async function POST(req: Request) {
   console.log("Favorited foods:", favoritedFoods);
   console.log("Messages:", messages);
 
-  const systemPrompt = buildSystemPrompt(role, favoritedFoods);
-  console.log("Constructed system prompt:", systemPrompt);
+  const systemPrompt = buildSystemPrompt(role, favoritedFoods); // sets context and instructions for the ai
 
   const stream = client.messages.stream({
     model: "claude-sonnet-4-6",
     max_tokens: 1024,
     system: systemPrompt,
-    messages: messages as MessageParam[],
+    messages: messages as MessageParam[], // back and forth messages between user and ai
   });
 
   const encoder = new TextEncoder();
