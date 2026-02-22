@@ -5,20 +5,15 @@
   --text-secondary: #666;
   --border-color: #e5e5e5;
 
-  height: calc(100dvh - 64px); /* subtract navbar height */
-  overflow: hidden;
+  min-height: calc(100dvh - 64px);
   background-color: var(--background);
   font-family: var(--font-geist-sans);
 }
 
 .container {
   max-width: 720px;
-  height: 100%;
   margin: 0 auto;
-  padding: 72px 40px 40px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  padding: 72px 40px 60px;
 }
 
 .heading {
