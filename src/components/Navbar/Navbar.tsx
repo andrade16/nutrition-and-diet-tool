@@ -13,7 +13,7 @@ type Role = "consumer" | "dietitian";
 const NAV_LINKS = [
   { href: "/search", label: "Search" },
   { href: "/favorites", label: "Favorites" },
-  { href: "/assessment", label: "Assessment", dietitianOnly: true },
+  { href: "/chat", label: "AI Chat" },
 ];
 
 const ROLES: { value: Role; label: string }[] = [
@@ -56,9 +56,7 @@ export default function Navbar() {
         </Link>
 
         <ul className={styles.links}>
-          {NAV_LINKS.filter(
-            (link) => !link.dietitianOnly || role === "dietitian",
-          ).map((link) => (
+          {NAV_LINKS.map((link) => (
             <li key={link.href}>
               <Link
                 href={link.href}
