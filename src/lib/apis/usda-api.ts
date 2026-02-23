@@ -1,11 +1,17 @@
 import type { FoodDetail, SearchResponse } from "@/lib/types/usda";
 
 const BASE_URL = "https://api.nal.usda.gov/fdc/v1";
+const USDA_API_KEY = process.env.USDA_API_KEY;
 
 function buildUrl(endpoint: string, params: Record<string, string>): string {
-  const key = process.env.USDA_API_KEY;
-  if (!key) throw new Error("USDA_API_KEY is not set in environment variables");
-  const searchParams = new URLSearchParams({ ...params, api_key: key });
+  if (!USDA_API_KEY) {
+    throw new Error("USDA_API_KEY is not set in environment variables");
+  }
+
+  const searchParams = new URLSearchParams({
+    ...params,
+    api_key: USDA_API_KEY!,
+  });
   return `${BASE_URL}${endpoint}?${searchParams}`;
 }
 
