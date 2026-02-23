@@ -2,6 +2,8 @@
 
 A nutrition lookup and diet recommendation app built for two distinct user roles — **consumers** looking up food facts and **dietitians** advising clients.
 
+- Demo: https://nutrition-and-diet-tool.vercel.app/
+
 ---
 
 ## Setup
