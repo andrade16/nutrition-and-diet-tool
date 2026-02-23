@@ -11,7 +11,7 @@ import {
 import { selectUserRole } from "@/store/slices/user/userSlice";
 import { selectFavoritedFoods } from "@/store/slices/favorites/favoritesSlice";
 import type { FavoriteItem } from "@/lib/types/usda";
-import { streamChatResponse } from "@/lib/chat-api";
+import { streamChatResponse } from "@/lib/apis/chat-api";
 import ChatMessage from "@/components/ChatMessage/ChatMessage";
 import ChatInput from "@/components/ChatInput/ChatInput";
 import styles from "./page.module.css";

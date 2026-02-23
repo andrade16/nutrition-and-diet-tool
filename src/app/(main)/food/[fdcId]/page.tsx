@@ -1,4 +1,4 @@
-import { getFoodById } from "@/lib/usda-api";
+import { getFoodById } from "@/lib/apis/usda-api";
 import FoodDetailView from "@/components/FoodDetail/FoodDetailView";
 import FavoriteButton from "@/components/FavoriteButton/FavoriteButton";
 import IngredientPill from "@/components/IngredientPill/IngredientPill";
@@ -73,7 +73,7 @@ export default async function FoodDetailPage({ params }: FoodDetailPageProps) {
         <div className={styles.servingInfo}>
           <div className={styles.sectionTitleRow}>
             <h2 className={styles.sectionTitle}>Ingredients</h2>
-            <InfoTooltip text="Tap ★ on any ingredient to save it to your favorites" />
+            <InfoTooltip text='Tap ★ on any ingredient to save it to your favorites' />
           </div>
           {foodIngredients ? (
             <ul className={styles.ingredientList}>

@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import SearchBar from "@/components/Search/SearchBar/SearchBar";
 import SearchResults from "@/components/Search/SearchResults/SearchResults";
 import styles from "./page.module.css";
-import { searchFoods } from "@/lib/usda-api";
+import { searchFoods } from "@/lib/apis/usda-api";
 
 interface SearchPageProps {
   searchParams: Promise<{ query?: string; page?: number }>;
