@@ -15,7 +15,7 @@ A nutrition lookup and diet recommendation app built for two distinct user roles
 ### Installation
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/andrade16/nutrition-and-diet-tool.git
 cd nutrition-and-diet-tool
 npm install
 ```
@@ -91,7 +91,7 @@ Within server-rendered pages, interactive islands (`SearchBar`, `FavoriteButton`
 
 - **Dietitian view:** Full nutrient table showing every data point returned by the USDA API, plus a macro donut chart for visual macro composition breakdown.
 
-**Search page.** The `/search` experience is intentionally frictionless — users land on a page with a prominent search bar and can immediately start typing. Results render below as a natural-scrolling list, which keeps the browser's native scroll behavior intact and makes pagination feel less jarring. The `SearchBar` is a client component that pushes the query and page number into the URL as query params, so results are bookmarkable and the back button works as expected. A result count sits above the list while pagination exists below the list. When no results are found, a contextual empty state guides the user back to searching rather than showing a blank page.
+**Search page.** The `/search` experience is intentionally frictionless — users land on a page with a prominent search bar and can immediately start typing. Results render below as a natural-scrolling list, which keeps the browser's native scroll behavior intact and makes pagination feel less jarring. The `SearchBar` is a client component that pushes the query and page number into the URL as query params, so results are bookmarkable and the back button works as expected. A result count sits above the list while pagination exists below the list. When no results are found, a contextual empty state guides the user back to searching rather than showing a blank page. On submit, `SearchBar` also writes the query to a short-lived `lastSearchQuery` cookie; the server component reads this cookie when the page is loaded without a `?query=` param (e.g. navigating back via the navbar), so results are pre-fetched server-side and appear immediately without requiring the user to re-submit.
 
 **Food detail page.** Clicking any search result or favorited food opens a detail page to `/food/<fdcId>` that is also server-rendered — the food data is fetched by `fdcId` on the server, so there is no client-side loading state. The page is structured into three distinct sections: serving size (household description and gram weight when available), ingredients (parsed from the USDA comma-separated string, deduplicated, and rendered as interactive pills), and nutrition facts (rendered differently based on role). A favorite button in the header lets users save or unsave the food without leaving the page.
 
