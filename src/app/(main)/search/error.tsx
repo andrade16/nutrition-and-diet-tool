@@ -23,7 +23,12 @@ export default function SearchError({
         </p>
         <button
           className={styles.retryBtn}
-          onClick={() => startTransition(() => { router.refresh(); reset(); })}
+          onClick={() =>
+            startTransition(() => {
+              router.refresh(); // clear route cache to retry fetch
+              reset();
+            })
+          }
           disabled={isPending}
         >
           {isPending ? "Retrying..." : "Try again"}
