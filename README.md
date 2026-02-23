@@ -68,7 +68,7 @@ npm test         # run test suite
 
 Within server-rendered pages, interactive islands (`SearchBar`, `FavoriteButton`, `IngredientPill`) are extracted into `"use client"` components so the page can remain a server component while still handling click events and Redux dispatch.
 
-**API key isolation.** Neither the USDA API key nor the Anthropic API key is ever sent to the browser. The USDA key is appended server-side inside `src/lib/usda-api.ts`, which is only ever called from server components. The Anthropic key is read inside the `/api/chat` Next.js Route Handler (`src/app/api/chat/route.ts`), which proxies chat requests from the client — the browser only ever calls `/api/chat`, never Anthropic directly. This ensures both secrets stay server-side even though the chat UI is a client component.
+**API key isolation.** Neither the USDA API key nor the Anthropic API key is ever sent to the browser. The USDA key is appended server-side inside `src/lib/apis/usda-api.ts`, which is only ever called from server components. The Anthropic key is read inside the `/api/chat` Next.js Route Handler (`src/app/api/chat/route.ts`), which proxies chat requests from the client — the browser only ever calls `/api/chat`, never Anthropic directly. This ensures both secrets stay server-side even though the chat UI is a client component.
 
 **Data fetching and caching.** USDA responses use Next.js's `fetch` cache via the `next: { revalidate }` option rather than an external cache layer. Both search results and individual food records are cached server-side for 1 hour (`revalidate: 3600`) to avoid redundant USDA API calls since the food database doesnt seem to change frequently. This provides a lightweight, zero-config caching layer without Redis or a CDN.
 
@@ -83,7 +83,7 @@ Within server-rendered pages, interactive islands (`SearchBar`, `FavoriteButton`
 
 `redux-persist` wraps each slice individually with its own `persistConfig`, giving per-slice control over what is stored. The `user` slice uses a `whitelist: ["role"]` to persist only the role value, not any future transient user state that might be added.
 
-**Streaming chat response.** The `/api/chat` route streams the Anthropic response using the SDK's `.stream()` method. `streamChatResponse` in `src/lib/chat-api.ts` reads chunks and calls an `onChunk` callback with the accumulated text on each tick. The in-progress exchange lives in local component state (`streamingUser`, `streamingAssistant`) and is only committed to Redux — and therefore persisted — after the stream closes cleanly. A failed or interrupted request discards the local state without writing anything to the store, so the persisted history is never polluted by partial responses.
+**Streaming chat response.** The `/api/chat` route streams the Anthropic response using the SDK's `.stream()` method. `streamChatResponse` in `src/lib/apis/chat-api.ts` reads chunks and calls an `onChunk` callback with the accumulated text on each tick. The in-progress exchange lives in local component state (`pendingUserMessage`, `streamingPartialReply`) and is only committed to Redux — and therefore persisted — after the stream closes cleanly. A failed or interrupted request discards the local state without writing anything to the store, so the persisted history is never polluted by partial responses.
 
 ### Product Decisions
 
@@ -140,8 +140,6 @@ Server components and the USDA API layer were deliberately excluded from the tes
 **Test coverage.** The slice test suite is thorough but component coverage is shallow. Adding more tests to increase coverage and also address the chat streaming logic would meaningfully increase confidence.
 
 **Backend persistence.** `redux-persist` to localStorage works for a single-device demo but doesn't survive clearing browser data or switching devices. A lightweight backend (even a simple Postgres table) would make favorites and notes genuinely persistent.
-
-**Error boundaries.** The USDA API occasionally returns 500s or malformed data. Wrapping key pages in React error boundaries would prevent the full page from breaking on a bad response.
 
 ## How AI Was Used
 

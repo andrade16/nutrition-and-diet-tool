@@ -36,13 +36,13 @@ export default function ChatPage() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  // The user's message for the current in-progress exchange. null means no exchange is streaming.
+  // The user's message for the current in-progress exchange. null means no exchange is pending.
   // Kept in local state (not Redux) so a failed request doesn't pollute the persisted history.
-  const [streamingUser, setStreamingUser] = useState<string | null>(null);
+  const [pendingUserMessage, setPendingUserMessage] = useState<string | null>(null);
 
   // Accumulates the assistant's response text as chunks arrive from the stream.
   // Replaced chunk-by-chunk; committed to Redux only when the stream finishes cleanly.
-  const [streamingAssistant, setStreamingAssistant] = useState("");
+  const [streamingPartialReply, setStreamingPartialReply] = useState("");
 
   const [error, setError] = useState<string | null>(null);
 
@@ -53,18 +53,18 @@ export default function ChatPage() {
   );
 
   // Merges persisted history with the in-progress streaming exchange for rendering.
-  // When not streaming (streamingUser === null), just shows the committed Redux messages.
-  // When streaming, appends the live user + assistant messages so the UI updates in real time.
+  // When not pending (pendingUserMessage === null), just shows the committed Redux messages.
+  // When pending, appends the live user + assistant messages so the UI updates in real time.
   const displayMessages = useMemo<Message[]>(
     () =>
-      streamingUser !== null
+      pendingUserMessage !== null
         ? [
             ...persistedMessages,
-            { role: "user", content: streamingUser },
-            { role: "assistant", content: streamingAssistant },
+            { role: "user", content: pendingUserMessage },
+            { role: "assistant", content: streamingPartialReply },
           ]
         : persistedMessages,
-    [persistedMessages, streamingUser, streamingAssistant],
+    [persistedMessages, pendingUserMessage, streamingPartialReply],
   );
 
   useEffect(() => {
@@ -75,8 +75,8 @@ export default function ChatPage() {
     const content = (text ?? input).trim();
     if (!content || isLoading) return;
 
-    setStreamingUser(content);
-    setStreamingAssistant("");
+    setPendingUserMessage(content);
+    setStreamingPartialReply("");
     setInput("");
     setError(null);
     setIsLoading(true);
@@ -88,7 +88,7 @@ export default function ChatPage() {
         messagesToSend,
         role,
         favoritedFoodNames,
-        (accumulated) => setStreamingAssistant(accumulated),
+        (accumulated) => setStreamingPartialReply(accumulated),
       );
       dispatch(addExchange({ user: content, assistant: finalContent }));
     } catch (err) {
@@ -98,8 +98,8 @@ export default function ChatPage() {
           : "Something went wrong. Please try again.",
       );
     } finally {
-      setStreamingUser(null);
-      setStreamingAssistant("");
+      setPendingUserMessage(null);
+      setStreamingPartialReply("");
       setIsLoading(false);
     }
   }
