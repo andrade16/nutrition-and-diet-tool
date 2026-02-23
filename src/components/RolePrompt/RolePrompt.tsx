@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setUserRole, selectUserRole } from "@/store/slices/user/userSlice";
@@ -11,15 +12,17 @@ export default function RolePrompt() {
   const dispatch = useAppDispatch();
   const role = useAppSelector(selectUserRole);
   const router = useRouter();
+  const [isSelecting, setIsSelecting] = useState(false);
 
   const selectRole = (selected: Role) => {
+    setIsSelecting(true);
     dispatch(setUserRole(selected));
     router.push("/search");
   };
 
   const clearRole = () => dispatch(setUserRole(null));
 
-  if (role) {
+  if (role && !isSelecting) {
     return (
       <div className={styles.selectedState}>
         <span className={styles.selectedLabel}>
