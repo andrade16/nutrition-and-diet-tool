@@ -101,6 +101,10 @@
   transition: transform 0.2s ease;
 }
 
+.roleLabelShort {
+  display: none;
+}
+
 .chevronOpen {
   transform: rotate(180deg);
 }
@@ -184,7 +188,26 @@
   }
 
   .roleTrigger {
+    padding: 0 8px;
+    gap: 4px;
+  }
+
+  .roleLabelFull {
     display: none;
+  }
+
+  .roleLabelShort {
+    display: inline;
+  }
+}
+
+@media (max-width: 360px) {
+  .inner {
+    gap: 8px;
+  }
+
+  .link {
+    padding: 6px 4px;
   }
 }
 

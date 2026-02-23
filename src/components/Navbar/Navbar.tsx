@@ -75,7 +75,12 @@ export default function Navbar() {
               onClick={() => setIsOpen((prev) => !prev)}
               aria-expanded={isOpen}
             >
-              {role === "consumer" ? "Consumer" : "Dietitian"}
+              <span className={styles.roleLabelFull}>
+                {role === "consumer" ? "Consumer" : "Dietitian"}
+              </span>
+              <span className={styles.roleLabelShort}>
+                {role === "consumer" ? "C" : "D"}
+              </span>
               <Chevron
                 className={`${styles.chevron} ${isOpen ? styles.chevronOpen : ""}`}
               />
