@@ -70,7 +70,7 @@ Within server-rendered pages, interactive islands (`SearchBar`, `FavoriteButton`
 
 **API key isolation.** Neither the USDA API key nor the Anthropic API key is ever sent to the browser. The USDA key is appended server-side inside `src/lib/usda-api.ts`, which is only ever called from server components. The Anthropic key is read inside the `/api/chat` Next.js Route Handler (`src/app/api/chat/route.ts`), which proxies chat requests from the client — the browser only ever calls `/api/chat`, never Anthropic directly. This ensures both secrets stay server-side even though the chat UI is a client component.
 
-**Data fetching and caching.** USDA responses use Next.js's `fetch` cache via the `next: { revalidate }` option rather than an external cache layer. Search results are cached for 5 minutes (`revalidate: 300`) since they change infrequently within a session. Individual food records are cached for 1 hour (`revalidate: 3600`) since USDA food data rarely changes. This provides a lightweight, zero-config caching layer without Redis or a CDN.
+**Data fetching and caching.** USDA responses use Next.js's `fetch` cache via the `next: { revalidate }` option rather than an external cache layer. Both search results and individual food records are cached server-side for 1 hour (`revalidate: 3600`) to avoid redundant USDA API calls since the food database doesnt seem to change frequently. This provides a lightweight, zero-config caching layer without Redis or a CDN.
 
 **Redux store design.** The store is composed of four slices, each in its own subdirectory with a colocated test file:
 

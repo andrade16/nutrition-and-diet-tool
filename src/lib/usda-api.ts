@@ -21,7 +21,7 @@ export async function searchFoods(
     dataType: "Branded",
   });
 
-  const res = await fetch(url, { next: { revalidate: 300 } }); // cache 5 min
+  const res = await fetch(url, { next: { revalidate: 3600 } }); // cache 1 hr
   if (!res.ok)
     throw new Error(`USDA API error: ${res.status} ${res.statusText}`);
   return res.json();
@@ -30,7 +30,7 @@ export async function searchFoods(
 export async function getFoodById(fdcId: string): Promise<FoodDetail> {
   const url = buildUrl(`/food/${fdcId}`, {});
 
-  const res = await fetch(url, { next: { revalidate: 3600 } }); // cache 1 hr — food data rarely changes
+  const res = await fetch(url, { next: { revalidate: 3600 } }); // cache 1 hr
   if (!res.ok)
     throw new Error(`USDA API error: ${res.status} ${res.statusText}`);
   return res.json();
