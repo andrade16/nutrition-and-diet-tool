@@ -39,6 +39,7 @@ export default function ChatInput({
             className={styles.newChatBtn}
             onClick={onNewChat}
             title="New chat"
+            aria-label="New chat"
           >
             ↺
           </button>
