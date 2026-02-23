@@ -101,7 +101,7 @@ Within server-rendered pages, interactive islands (`SearchBar`, `FavoriteButton`
 
 **Favorites page.** The `/favorites` page is split into two tabs — Foods and Ingredients — since they serve different purposes and mixing them would create noise. The Foods tab groups saved items by their USDA food category, making it easy to scan a large list at a glance. Each tab has a "Clear all" button that only appears when the tab has items, keeping the UI uncluttered when empty. Both tabs show contextual empty states with a call-to-action when nothing has been saved yet. For dietitians, each food entry in the Foods tab also renders an inline note input directly beneath the food card — allowing per-food annotations without navigating away.
 
-- **Dietitian notes.** Each favorited food on the dietitian view has an inline note input. The Save button only appears when the text differs from the stored value, preventing unnecessary dispatches. Notes persist via redux-persist alongside the favorited food. This was added to further enhance the dietian experience by allowing them to add notes for foods (maybe a note referring to a client?).
+- **Dietitian notes.** Each favorited food on the dietitian view has an inline note input. The Save button only appears when the text differs from the stored value, preventing unnecessary dispatches. Notes persist via redux-persist alongside the favorited food. This was added to further enhance the dietitian experience by allowing them to add notes for foods (maybe a note referring to a client?).
 
 - **NoteInput state design.** The dietitian notes component reads `savedNote` directly from Redux via `useSelector` on every render rather than receiving it as a prop. This eliminated a subtle bug where the local `useState` would initialize with a stale prop value after tab switches, making the Save button always visible. Reading from the store directly ensures the component always reflects truth.
 
@@ -129,9 +129,11 @@ Server components and the USDA API layer were deliberately excluded from the tes
 
 **Skeleton loading states.** The search page currently shows nothing while the server renders. Adding skeleton placeholders would improve perceived performance.
 
-**Richer search.** Search through full USDA database, not just "Branded" food category. would make results much more actionable.
+**Richer search.** Searching through the full USDA database, not just the "Branded" food category, would make results much more actionable.
 
 **Accessibility.** ARIA labels, keyboard navigation for the favorites page, and focus management after search submission are all missing.
+
+**Better mobile experience.** The web app is responsive for mobile viewports, but there are some components that can be built out to present the user with a better mobile experience.
 
 **Test coverage.** The slice test suite is thorough but component coverage is shallow. Adding more tests to increase coverage and also address the chat streaming logic would meaningfully increase confidence.
 
@@ -141,9 +143,9 @@ Server components and the USDA API layer were deliberately excluded from the tes
 
 ## How AI Was Used
 
-Claude Code was used as a collaborator throughout parts of the build of this project. Not just for some code generation, but also for debugging and iterative refinement on personally written code.
+Claude Code was used as a collaborator for parts of the build of this project — not just for code generation, but also for debugging and iterative refinement on personally written code.
 
-**Feature implementation.** The base project creation and base styling for this project was done by prompting Claude. I didn't want to spend too much time working on establishing certian styling concepts like theme colors, layouts, and animations. Additionally, an outline was provided and then followed on how to integrate Claude for the `/chat` page. Lastly, Claude was used to refactor personally written code when things looked like they could have been optimized.
+**Feature implementation.** The base project creation and base styling for this project was done by prompting Claude. I didn't want to spend too much time working on establishing certain styling concepts like theme colors, layouts, and animations. Additionally, an outline was provided and then followed on how to integrate Claude for the `/chat` page. Lastly, Claude was used to refactor personally written code when things looked like they could have been optimized.
 
 **Debugging.** Several real bugs were diagnosed through conversations with Claude. For example, an issue where `dispatch` was not firing in `NoteInput` looked like a Redux wiring issue but turned out to be a stale Next.js hot-reload cache — Claude helped rule out the obvious causes before arriving at "try restarting the dev server."
 
@@ -153,4 +155,4 @@ Claude Code was used as a collaborator throughout parts of the build of this pro
 
 **Project cleanup.** Before finalizing, Claude did a full sweep of the codebase to remove dead CSS, leftover `console.log` calls, unused imports.
 
-**Documentation.** Claude also helped with generating documentation for this project. Where I prompted it to estblish major writing sections in markdown format.
+**Documentation.** Claude also helped with generating documentation for this project, prompting it to establish the major writing sections in markdown format.
