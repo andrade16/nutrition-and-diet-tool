@@ -50,23 +50,25 @@ export default function Navbar() {
   return (
     <nav className={styles.nav}>
       <div className={styles.inner}>
-        <Link href='/' className={styles.brand}>
-          <span className={styles.brandIcon}>🥦</span>
-          <span className={styles.brandName}>NutriTool</span>
-        </Link>
+        <div className={styles.topRow}>
+          <Link href='/' className={styles.brand}>
+            <span className={styles.brandIcon}>🥦</span>
+            <span className={styles.brandName}>NutriTool</span>
+          </Link>
 
-        <ul className={styles.links}>
-          {NAV_LINKS.map((link) => (
-            <li key={link.href}>
-              <Link
-                href={link.href}
-                className={`${styles.link} ${pathname === link.href ? styles.linkActive : ""}`}
-              >
-                {link.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
+          <ul className={styles.links}>
+            {NAV_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className={`${styles.link} ${pathname === link.href ? styles.linkActive : ""}`}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
 
         {role && (
           <div className={styles.roleMenu} ref={dropdownRef}>
@@ -75,12 +77,7 @@ export default function Navbar() {
               onClick={() => setIsOpen((prev) => !prev)}
               aria-expanded={isOpen}
             >
-              <span className={styles.roleLabelFull}>
-                {role === "consumer" ? "Consumer" : "Dietitian"}
-              </span>
-              <span className={styles.roleLabelShort}>
-                {role === "consumer" ? "C" : "D"}
-              </span>
+              {role === "consumer" ? "Consumer" : "Dietitian"}
               <Chevron
                 className={`${styles.chevron} ${isOpen ? styles.chevronOpen : ""}`}
               />
